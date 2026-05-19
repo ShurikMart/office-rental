@@ -1,4 +1,8 @@
 package com.example.office_rental.repository;
 
-public interface OfficeSpaceRepository {
+import com.example.office_rental.model.OfficeSpace;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface OfficeSpaceRepository extends JpaRepository<OfficeSpace, Long> {
+
 }
