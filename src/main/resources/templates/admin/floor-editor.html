@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <title>Floor Editor</title>
+
+    <link rel="stylesheet" href="/css/floor-plan.css">
+
+</head>
+
+<body>
+
+<h1>Floor Plan Editor</h1>
+
+<div class="toolbar">
+
+    <label>Office:</label>
+
+    <select id="office-select">
+
+        <option
+                th:each="office : ${offices}"
+                th:value="${office.id}"
+                th:text="${office.number}">
+        </option>
+
+    </select>
+
+    <button onclick="saveSelection()">
+        Save
+    </button>
+
+</div>
+
+<hr>
+
+<h3>Create Office</h3>
+
+<div class="toolbar">
+
+    <input
+            type="text"
+            id="new-number"
+            placeholder="Office number">
+
+    <input
+            type="number"
+            id="new-area"
+            placeholder="Area">
+
+    <input
+            type="number"
+            id="new-floor"
+            placeholder="Floor">
+
+    <input
+            type="number"
+            id="new-price"
+            placeholder="Price">
+
+    <button onclick="createOffice()">
+        Create Office
+    </button>
+
+</div>
+
+<div id="save-status"></div>
+
+<div
+        class="plan-container"
+        id="plan-container"
+
+        style="
+            background-image:
+            url('/images/floor1.png');
+        ">
+
+    <div
+            th:each="plan : ${floorPlans}"
+
+            class="office-box"
+
+            th:style="
+                'left:' + ${plan.x} + 'px;' +
+                'top:' + ${plan.y} + 'px;' +
+                'width:' + ${plan.width} + 'px;' +
+                'height:' + ${plan.height} + 'px;'
+            ">
+    </div>
+
+</div>
+
+<script src="/js/floor-editor.js"></script>
+
+</body>
+</html>

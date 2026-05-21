@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <title>Floor Plan</title>
+    <link rel="stylesheet" href="/css/floor-plan.css">
+
+</head>
+
+<body>
+
+<h1 style="text-align:center;">Building Floor Plan</h1>
+
+<div class="plan-container"
+     style="
+        background-image:
+        url('/images/floor1.png');
+     ">
+
+    <div
+            th:each="plan : ${floorPlans}"
+
+            class="office-box"
+
+            onclick="showOfficeInfo(this)"
+
+            th:if="${plan.officeSpace != null}"
+
+            th:data-number="${plan.officeSpace.number}"
+            th:data-area="${plan.officeSpace.area}"
+            th:data-price="${plan.officeSpace.rentalPrice}"
+            th:data-floor="${plan.officeSpace.floor}"
+            th:data-type="${plan.officeSpace.officeType}"
+
+            th:style="
+            'left:' + ${plan.x} + 'px;' +
+            'top:' + ${plan.y} + 'px;' +
+            'width:' + ${plan.width} + 'px;' +
+            'height:' + ${plan.height} + 'px;'
+        ">
+
+        <div class="office-label"
+             th:text="${plan.officeSpace.number}">
+        </div>
+
+    </div>
+
+</div>
+
+<div class="info-panel">
+
+    <h3>Office Info</h3>
+
+    <p><b>Number:</b> <span id="office-number">-</span></p>
+    <p><b>Area:</b> <span id="office-area">-</span></p>
+    <p><b>Price:</b> <span id="office-price">-</span></p>
+    <p><b>Floor:</b> <span id="office-floor">-</span></p>
+    <p><b>Type:</b> <span id="office-type">-</span></p>
+
+</div>
+
+<script>
+
+    function showOfficeInfo(element) {
+
+        document.getElementById('office-number').innerText =
+            element.dataset.number;
+
+        document.getElementById('office-area').innerText =
+            element.dataset.area;
+
+        document.getElementById('office-price').innerText =
+            element.dataset.price;
+
+        document.getElementById('office-floor').innerText =
+            element.dataset.floor;
+
+        document.getElementById('office-type').innerText =
+            element.dataset.type;
+    }
+
+</script>
+
+</body>
+</html>

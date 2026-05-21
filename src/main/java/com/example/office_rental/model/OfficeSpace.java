@@ -41,4 +41,31 @@ public class OfficeSpace {
     @JoinColumn(name = "status_id")
     private OfficeStatus status;
 
+    @ManyToOne
+    @JoinColumn(name = "building_id", nullable = false)
+    private Building building;
+
+    public OfficeSpace(
+            String number,
+            Double area,
+            Integer floor,
+            Integer capacity,
+            String officeType,
+            Boolean hasFurniture,
+            Double rentalPrice,
+            OfficeStatus status,
+            Building building
+    ) {
+
+        this.number = number;
+        this.area = area;
+        this.floor = floor;
+        this.capacity = capacity;
+        this.officeType = officeType;
+        this.hasFurniture = hasFurniture;
+        this.rentalPrice = rentalPrice;
+        this.status = status;
+        this.building = building;
+    }
+
 }
