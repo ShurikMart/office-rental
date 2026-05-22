@@ -1,55 +1,48 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-
     <title>Floor Plan</title>
     <link rel="stylesheet" href="/css/floor-plan.css">
-
 </head>
 
 <body>
 
+<div style="padding:10px;">
+    <a href="/profile">Profile</a>
+</div>
+
 <h1 style="text-align:center;">Building Floor Plan</h1>
 
 <div class="plan-container"
-     style="
-        background-image:
-        url('/images/floor1.png');
-     ">
+     style="background-image:url('/images/floor1.png');">
 
     <div
             th:each="plan : ${floorPlans}"
-
             class="office-box"
-
-            onclick="showOfficeInfo(this)"
-
+            th:classappend="${plan.officeSpace.status.name() == 'OCCUPIED'} ? ' occupied-office' : ''"
             th:if="${plan.officeSpace != null}"
-
+            th:data-id="${plan.officeSpace.id}"
             th:data-number="${plan.officeSpace.number}"
             th:data-area="${plan.officeSpace.area}"
             th:data-price="${plan.officeSpace.rentalPrice}"
             th:data-floor="${plan.officeSpace.floor}"
             th:data-type="${plan.officeSpace.officeType}"
-
+            th:data-status="${plan.officeSpace.status}"
             th:style="
-            'left:' + ${plan.x} + 'px;' +
-            'top:' + ${plan.y} + 'px;' +
-            'width:' + ${plan.width} + 'px;' +
-            'height:' + ${plan.height} + 'px;'
-        ">
+        'left:' + ${plan.x} + 'px;' +
+        'top:' + ${plan.y} + 'px;' +
+        'width:' + ${plan.width} + 'px;' +
+        'height:' + ${plan.height} + 'px;'"
+            th:onclick="${plan.officeSpace.status.name() == 'FREE' or isAdmin} ? 'showOfficeInfo(this)' : null">
 
-        <div class="office-label"
-             th:text="${plan.officeSpace.number}">
-        </div>
-
+        <div class="office-label" th:text="${plan.officeSpace.number}"></div>
     </div>
-
 </div>
 
 <div class="info-panel">
-
     <h3>Office Info</h3>
 
     <p><b>Number:</b> <span id="office-number">-</span></p>
@@ -58,28 +51,29 @@
     <p><b>Floor:</b> <span id="office-floor">-</span></p>
     <p><b>Type:</b> <span id="office-type">-</span></p>
 
+    <hr>
+
+    <form method="post" action="/applications/create" sec:authorize="isAuthenticated()">
+        <input type="hidden" id="office-id-input" name="officeId">
+        <textarea name="comment" placeholder="Comment"></textarea>
+        <br><br>
+        <button type="submit">Apply for Rent</button>
+    </form>
+
+    <p sec:authorize="!isAuthenticated()">
+        Please log in to apply for rent.
+    </p>
 </div>
 
 <script>
-
     function showOfficeInfo(element) {
-
-        document.getElementById('office-number').innerText =
-            element.dataset.number;
-
-        document.getElementById('office-area').innerText =
-            element.dataset.area;
-
-        document.getElementById('office-price').innerText =
-            element.dataset.price;
-
-        document.getElementById('office-floor').innerText =
-            element.dataset.floor;
-
-        document.getElementById('office-type').innerText =
-            element.dataset.type;
+        document.getElementById('office-id-input').value = element.dataset.id;
+        document.getElementById('office-number').innerText = element.dataset.number;
+        document.getElementById('office-area').innerText = element.dataset.area;
+        document.getElementById('office-price').innerText = element.dataset.price;
+        document.getElementById('office-floor').innerText = element.dataset.floor;
+        document.getElementById('office-type').innerText = element.dataset.type;
     }
-
 </script>
 
 </body>

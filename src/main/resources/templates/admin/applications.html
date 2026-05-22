@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Applications</title>
+</head>
+
+<body>
+
+<h1>Rental Applications</h1>
+
+<hr>
+
+<table border="1">
+
+    <tr>
+
+        <th>ID</th>
+        <th>User</th>
+        <th>Office</th>
+        <th>Status</th>
+        <th>Actions</th>
+
+    </tr>
+
+    <tr th:each="app : ${applications}">
+
+        <td th:text="${app.id}"></td>
+
+        <td th:text="${app.user.username}"></td>
+
+        <td th:text="${app.officeSpace.number}"></td>
+
+        <td th:text="${app.status}"></td>
+
+        <td>
+
+            <form
+                    th:action="@{'/admin/applications/' + ${app.id} + '/approve'}"
+                    method="post"
+                    style="display:inline;">
+
+                <button type="submit">
+                    Approve
+                </button>
+
+            </form>
+
+            <form
+                    th:action="@{'/admin/applications/' + ${app.id} + '/reject'}"
+                    method="post"
+                    style="display:inline;">
+
+                <button type="submit">
+                    Reject
+                </button>
+
+            </form>
+
+        </td>
+
+    </tr>
+
+</table>
+
+</body>
+</html>

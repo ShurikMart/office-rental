@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+
+    <title>Admin Dashboard</title>
+
+</head>
+
+<body>
+
+<h1>Admin Dashboard</h1>
+
+<hr>
+
+<h3>Office Statistics</h3>
+
+<p>
+    <b>Total Offices:</b>
+
+    <span th:text="${totalOffices}"></span>
+</p>
+
+<p>
+    <b>Free Offices:</b>
+
+    <span th:text="${freeOffices}"></span>
+</p>
+
+<p>
+    <b>Occupied Offices:</b>
+
+    <span th:text="${occupiedOffices}"></span>
+</p>
+
+<hr>
+
+<h3>Navigation</h3>
+
+<ul>
+
+    <li>
+
+        <a href="/admin/floor-editor">
+            Floor Editor
+        </a>
+
+    </li>
+
+    <li>
+
+        <a href="/floor-plan">
+            Floor Plan
+        </a>
+
+    </li>
+
+    <li>
+
+        <a href="/profile">
+            User Profile
+        </a>
+
+    </li>
+
+    <li>
+
+        <a href="/admin/applications">
+            Manage Applications
+        </a>
+
+    </li>
+
+</ul>
+
+<hr>
+
+<h3>Applications Report</h3>
+
+<p>
+    <b>Pending:</b>
+
+    <span th:text="${pendingApplications}"></span>
+</p>
+
+<p>
+    <b>Approved:</b>
+
+    <span th:text="${approvedApplications}"></span>
+</p>
+
+<p>
+    <b>Rejected:</b>
+
+    <span th:text="${rejectedApplications}"></span>
+</p>
+
+<hr>
+
+<form method="post" action="/logout">
+
+    <button type="submit">
+        Logout
+    </button>
+
+</form>
+
+</body>
+</html>

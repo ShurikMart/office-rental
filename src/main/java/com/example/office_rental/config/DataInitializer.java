@@ -1,12 +1,11 @@
 package com.example.office_rental.config;
 
 import com.example.office_rental.model.*;
-import com.example.office_rental.repository.BuildingRepository;
-import com.example.office_rental.repository.FloorPlanRepository;
-import com.example.office_rental.repository.OfficeSpaceRepository;
-import com.example.office_rental.repository.OfficeStatusRepository;
+import com.example.office_rental.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Component;
 public class DataInitializer implements CommandLineRunner {
 
     private final BuildingRepository buildingRepository;
-    private final OfficeStatusRepository officeStatusRepository;
     private final OfficeSpaceRepository officeSpaceRepository;
     private final FloorPlanRepository floorPlanRepository;
 
@@ -26,16 +24,6 @@ public class DataInitializer implements CommandLineRunner {
             return;
         }
 
-        // ===== STATUSES =====
-
-        OfficeStatus availableStatus = new OfficeStatus();
-        availableStatus.setName("AVAILABLE");
-
-        OfficeStatus occupiedStatus = new OfficeStatus();
-        occupiedStatus.setName("OCCUPIED");
-
-        officeStatusRepository.save(availableStatus);
-        officeStatusRepository.save(occupiedStatus);
 
         // ===== BUILDING =====
 
@@ -57,7 +45,7 @@ public class DataInitializer implements CommandLineRunner {
                 "OPEN_SPACE",
                 true,
                 1200.0,
-                availableStatus,
+                OfficeStatus.FREE,
                 building
         );
 
@@ -84,7 +72,7 @@ public class DataInitializer implements CommandLineRunner {
                 "PRIVATE",
                 false,
                 900.0,
-                occupiedStatus,
+                OfficeStatus.FREE,
                 building
         );
 
@@ -111,7 +99,7 @@ public class DataInitializer implements CommandLineRunner {
                 "CONFERENCE",
                 true,
                 2000.0,
-                availableStatus,
+                OfficeStatus.FREE,
                 building
         );
 
@@ -128,6 +116,32 @@ public class DataInitializer implements CommandLineRunner {
 
         floorPlanRepository.save(fp103);
 
-        System.out.println("Test data initialized.");
     }
+
+    @Bean
+    CommandLineRunner initUsers(
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder
+    ) {
+
+        return args -> {
+
+            if (userRepository.count() == 0) {
+
+                User admin = new User(
+
+                        "admin",
+
+                        "admin@example.com",
+
+                        passwordEncoder.encode("admin"),
+
+                        Role.ADMIN
+                );
+
+                userRepository.save(admin);
+            }
+        };
+    }
+
 }

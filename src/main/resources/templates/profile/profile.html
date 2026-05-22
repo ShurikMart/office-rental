@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+
+    <title>Profile</title>
+
+</head>
+
+<body>
+
+<h1>User Profile</h1>
+
+<hr>
+
+<h3>User Information</h3>
+
+<p>
+    <b>Username:</b>
+
+    <span th:text="${user.username}"></span>
+</p>
+
+<p>
+    <b>Email:</b>
+
+    <span th:text="${user.email}"></span>
+</p>
+
+<p>
+    <b>Role:</b>
+
+    <span th:text="${user.role}"></span>
+</p>
+
+<hr>
+
+<h3>Navigation</h3>
+<ul>
+
+    <li>
+
+        <a href="/floor-plan">
+            View Floor Plan
+        </a>
+
+    </li>
+
+    <li sec:authorize="hasRole('USER')">
+
+        <a href="/applications/my">
+            My Applications
+        </a>
+
+    </li>
+
+    <li sec:authorize="hasRole('ADMIN')">
+
+        <a href="/admin/dashboard">
+            Admin Dashboard
+        </a>
+
+    </li>
+
+</ul>
+
+<hr>
+
+<form method="post" action="/logout">
+
+    <button type="submit">
+        Logout
+    </button>
+
+</form>
+
+</body>
+</html>

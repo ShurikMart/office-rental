@@ -3,7 +3,9 @@ package com.example.office_rental.controller;
 import com.example.office_rental.dto.CreateOfficeDto;
 import com.example.office_rental.dto.FloorPlanDto;
 import com.example.office_rental.model.*;
-import com.example.office_rental.repository.*;
+import com.example.office_rental.repository.BuildingRepository;
+import com.example.office_rental.repository.FloorPlanRepository;
+import com.example.office_rental.repository.OfficeSpaceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +18,6 @@ public class AdminController {
     private final OfficeSpaceRepository officeSpaceRepository;
 
     private final FloorPlanRepository floorPlanRepository;
-
-    private final OfficeStatusRepository officeStatusRepository;
 
     private final BuildingRepository buildingRepository;
 
@@ -71,12 +71,6 @@ public class AdminController {
             @RequestBody CreateOfficeDto dto
     ) {
 
-        OfficeStatus status =
-                officeStatusRepository.findAll()
-                        .stream()
-                        .findFirst()
-                        .orElseThrow();
-
         Building building =
                 buildingRepository.findAll()
                         .stream()
@@ -91,7 +85,9 @@ public class AdminController {
                 "STANDARD",
                 false,
                 dto.getRentalPrice(),
-                status,
+
+                OfficeStatus.FREE,
+
                 building
         );
 

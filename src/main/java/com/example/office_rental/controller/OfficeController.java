@@ -3,6 +3,7 @@ package com.example.office_rental.controller;
 import com.example.office_rental.repository.FloorPlanRepository;
 import com.example.office_rental.repository.OfficeSpaceRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,26 +17,20 @@ public class OfficeController {
 
     @GetMapping("/offices")
     public String offices(Model model) {
-
-        model.addAttribute(
-                "offices",
-                officeSpaceRepository.findAll()
-        );
-
+        model.addAttribute("offices", officeSpaceRepository.findAll());
         return "offices/list";
     }
 
     @GetMapping("/floor-plan")
-    public String floorPlan(Model model) {
+    public String floorPlan(Model model, Authentication authentication) {
+        model.addAttribute("floorPlans", floorPlanRepository.findByFloorNumber(1));
 
-        model.addAttribute(
-                "floorPlans",
-                floorPlanRepository.findByFloorNumber(1)
-        );
+        boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        model.addAttribute("isAdmin", isAdmin);
 
         return "offices/floor-plan";
     }
-
-
 
 }

@@ -37,9 +37,13 @@ public class OfficeSpace {
     @Column(nullable = false)
     private Double rentalPrice;
 
-    @ManyToOne
-    @JoinColumn(name = "status_id")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private OfficeStatus status;
+
+    @ManyToOne
+    @JoinColumn(name = "tenant_id")
+    private User currentTenant;
 
     @ManyToOne
     @JoinColumn(name = "building_id", nullable = false)
