@@ -134,7 +134,7 @@ public class DataInitializer implements CommandLineRunner {
 
                         "admin@example.com",
 
-                        passwordEncoder.encode("admin"),
+                        passwordEncoder.encode("55849276"),
 
                         Role.ADMIN
                 );

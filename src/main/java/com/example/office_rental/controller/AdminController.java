@@ -93,4 +93,37 @@ public class AdminController {
 
         return officeSpaceRepository.save(office);
     }
+
+    @GetMapping("/offices/{id}")
+    @ResponseBody
+    public OfficeSpace getOffice(@PathVariable Long id) {
+        return officeSpaceRepository.findById(id).orElseThrow();
+    }
+
+    @PutMapping("/offices/update/{id}")
+    @ResponseBody
+    public OfficeSpace updateOffice(@PathVariable Long id, @RequestBody CreateOfficeDto dto) {
+
+        OfficeSpace office = officeSpaceRepository.findById(id).orElseThrow();
+
+        office.setNumber(dto.getNumber());
+        office.setArea(dto.getArea());
+        office.setFloor(dto.getFloor());
+        office.setCapacity(dto.getCapacity());
+        office.setOfficeType(dto.getOfficeType());
+        office.setHasFurniture(dto.getHasFurniture());
+        office.setRentalPrice(dto.getRentalPrice());
+        office.setStatus(dto.getStatus() != null ? OfficeStatus.valueOf(dto.getStatus()) : office.getStatus());
+
+        return officeSpaceRepository.save(office);
+    }
+
+    @DeleteMapping("/offices/delete/{id}")
+    @ResponseBody
+    public String deleteOffice(@PathVariable Long id) {
+        floorPlanRepository.findByOfficeSpaceId(id).ifPresent(floorPlanRepository::delete);
+        officeSpaceRepository.deleteById(id);
+        return "deleted";
+    }
+
 }
