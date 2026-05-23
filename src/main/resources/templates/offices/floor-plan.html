@@ -10,11 +10,72 @@
 
 <body>
 
-<div style="padding:10px;">
-    <a href="/profile">Profile</a>
+<div class="profile-sidebar">
+    <a href="/profile" class="profile-link">Profile</a>
 </div>
 
 <h1 style="text-align:center;">Building Floor Plan</h1>
+
+<div class="filters-sidebar">
+    <button type="button" class="filters-toggle-btn" id="filters-toggle-btn">
+        Show filters
+    </button>
+
+    <div class="filters-panel" id="filters-panel">
+        <form method="get" action="/floor-plan" class="filters-form">
+
+            <h3>Filters</h3>
+
+            <label>Status:</label>
+            <select name="status">
+                <option value="" th:selected="${param.status == null || param.status[0] == ''}">ALL</option>
+                <option value="FREE" th:selected="${param.status != null && param.status[0] == 'FREE'}">FREE</option>
+                <option value="OCCUPIED" th:selected="${param.status != null && param.status[0] == 'OCCUPIED'}">OCCUPIED</option>
+            </select>
+
+            <label>Floor:</label>
+            <input type="number" name="floor" placeholder="Floor"
+                   th:value="${param.floor != null ? param.floor[0] : ''}">
+
+            <label>Min area:</label>
+            <input type="number" name="minArea" placeholder="Min area"
+                   th:value="${param.minArea != null ? param.minArea[0] : ''}">
+
+            <label>Max area:</label>
+            <input type="number" name="maxArea" placeholder="Max area"
+                   th:value="${param.maxArea != null ? param.maxArea[0] : ''}">
+
+            <label>Min capacity:</label>
+            <input type="number" name="minCapacity" placeholder="Min capacity"
+                   th:value="${param.minCapacity != null ? param.minCapacity[0] : ''}">
+
+            <label>Office type:</label>
+            <select name="officeType">
+                <option value="" th:selected="${param.officeType == null || param.officeType[0] == ''}">Any type</option>
+                <option value="STANDARD" th:selected="${param.officeType != null && param.officeType[0] == 'STANDARD'}">STANDARD</option>
+                <option value="OPENSPACE" th:selected="${param.officeType != null && param.officeType[0] == 'OPENSPACE'}">OPENSPACE</option>
+            </select>
+
+            <label>Furniture:</label>
+            <select name="hasFurniture">
+                <option value="" th:selected="${param.hasFurniture == null || param.hasFurniture[0] == ''}">Furniture</option>
+                <option value="true" th:selected="${param.hasFurniture != null && param.hasFurniture[0] == 'true'}">Yes</option>
+                <option value="false" th:selected="${param.hasFurniture != null && param.hasFurniture[0] == 'false'}">No</option>
+            </select>
+
+            <label>Min price:</label>
+            <input type="number" name="minPrice" th:value="${param.minPrice != null ? param.minPrice[0] : ''}">
+
+            <label>Max price:</label>
+            <input type="number" name="maxPrice" th:value="${param.maxPrice != null ? param.maxPrice[0] : ''}">
+
+            <div class="filters-actions">
+                <button type="submit">Apply</button>
+                <a href="/floor-plan">Reset</a>
+            </div>
+        </form>
+    </div>
+</div>
 
 <div class="plan-container"
      style="background-image:url('/images/floor1.png');">
@@ -32,17 +93,18 @@
             th:data-type="${plan.officeSpace.officeType}"
             th:data-status="${plan.officeSpace.status}"
             th:style="
-        'left:' + ${plan.x} + 'px;' +
-        'top:' + ${plan.y} + 'px;' +
-        'width:' + ${plan.width} + 'px;' +
-        'height:' + ${plan.height} + 'px;'"
-            th:onclick="${plan.officeSpace.status.name() == 'FREE' or isAdmin} ? 'showOfficeInfo(this)' : null">
+                'left:' + ${plan.x} + 'px;' +
+                'top:' + ${plan.y} + 'px;' +
+                'width:' + ${plan.width} + 'px;' +
+                'height:' + ${plan.height} + 'px;'"
+            th:onclick="${plan.officeSpace.status.name() == 'FREE' or isAdmin} ? 'showOfficeInfo(this, event)' : null"
+    >
 
         <div class="office-label" th:text="${plan.officeSpace.number}"></div>
     </div>
 </div>
 
-<div class="info-panel">
+<div class="info-panel" onclick="event.stopPropagation()">
     <h3>Office Info</h3>
 
     <p><b>Number:</b> <span id="office-number">-</span></p>
@@ -65,16 +127,7 @@
     </p>
 </div>
 
-<script>
-    function showOfficeInfo(element) {
-        document.getElementById('office-id-input').value = element.dataset.id;
-        document.getElementById('office-number').innerText = element.dataset.number;
-        document.getElementById('office-area').innerText = element.dataset.area;
-        document.getElementById('office-price').innerText = element.dataset.price;
-        document.getElementById('office-floor').innerText = element.dataset.floor;
-        document.getElementById('office-type').innerText = element.dataset.type;
-    }
-</script>
+<script src="/js/floor-plan.js"></script>
 
 </body>
 </html>

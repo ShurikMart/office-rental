@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html
         xmlns:th="http://www.thymeleaf.org"
-
         xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <title>My Applications</title>
 </head>
@@ -21,6 +21,7 @@
         <th>Office</th>
         <th>Status</th>
         <th>Created</th>
+        <th>Actions</th>
 
     </tr>
 
@@ -33,6 +34,21 @@
         <td th:text="${app.status}"></td>
 
         <td th:text="${app.createdAt}"></td>
+
+        <td>
+
+            <form
+                    th:if="${app.officeSpace.status.name() == 'OCCUPIED'}"
+                    th:action="@{/applications/release/{id}(id=${app.officeSpace.id})}"
+                    method="post">
+
+                <button type="submit">
+                    Release Office
+                </button>
+
+            </form>
+
+        </td>
 
     </tr>
 

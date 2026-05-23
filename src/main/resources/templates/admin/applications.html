@@ -1,13 +1,39 @@
 <!DOCTYPE html>
 <html
         xmlns:th="http://www.thymeleaf.org"
-
         xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <title>Applications</title>
 </head>
 
 <body>
+
+<div th:if="${success}"
+     style="
+        background:#d4edda;
+        color:#155724;
+        padding:10px;
+        margin-bottom:15px;
+        border-radius:5px;
+     ">
+
+    <span th:text="${success}"></span>
+
+</div>
+
+<div th:if="${error}"
+     style="
+        background:#f8d7da;
+        color:#721c24;
+        padding:10px;
+        margin-bottom:15px;
+        border-radius:5px;
+     ">
+
+    <span th:text="${error}"></span>
+
+</div>
 
 <h1>Rental Applications</h1>
 
@@ -38,6 +64,7 @@
         <td>
 
             <form
+                    th:if="${app.status.name() == 'PENDING'}"
                     th:action="@{'/admin/applications/' + ${app.id} + '/approve'}"
                     method="post"
                     style="display:inline;">
@@ -49,12 +76,25 @@
             </form>
 
             <form
+                    th:if="${app.status.name() == 'PENDING'}"
                     th:action="@{'/admin/applications/' + ${app.id} + '/reject'}"
                     method="post"
                     style="display:inline;">
 
                 <button type="submit">
                     Reject
+                </button>
+
+            </form>
+
+            <form
+                    th:if="${app.officeSpace.status.name() == 'OCCUPIED'}"
+                    th:action="@{/admin/offices/release/{id}(id=${app.officeSpace.id})}"
+                    method="post"
+                    style="display:inline;">
+
+                <button type="submit">
+                    Release Office
                 </button>
 
             </form>
