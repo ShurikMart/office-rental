@@ -9,6 +9,7 @@ import com.example.office_rental.repository.OfficeSpaceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.ui.Model;
 
 @Controller
 @RequiredArgsConstructor
@@ -22,7 +23,7 @@ public class AdminController {
     private final BuildingRepository buildingRepository;
 
     @GetMapping("/floor-editor")
-    public String floorEditor(org.springframework.ui.Model model) {
+    public String floorEditor(Model model) {
 
         model.addAttribute(
                 "offices",
@@ -32,6 +33,11 @@ public class AdminController {
         model.addAttribute(
                 "floorPlans",
                 floorPlanRepository.findAll()
+        );
+
+        model.addAttribute(
+                "buildings",
+                buildingRepository.findAll()
         );
 
         return "admin/floor-editor";
@@ -72,22 +78,18 @@ public class AdminController {
     ) {
 
         Building building =
-                buildingRepository.findAll()
-                        .stream()
-                        .findFirst()
+                buildingRepository.findById(dto.getBuildingId())
                         .orElseThrow();
 
         OfficeSpace office = new OfficeSpace(
                 dto.getNumber(),
                 dto.getArea(),
                 dto.getFloor(),
-                1,
-                "STANDARD",
-                false,
+                dto.getCapacity(),
+                dto.getOfficeType(),
+                dto.getHasFurniture(),
                 dto.getRentalPrice(),
-
-                OfficeStatus.FREE,
-
+                OfficeStatus.valueOf(dto.getStatus()),
                 building
         );
 

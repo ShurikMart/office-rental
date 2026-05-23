@@ -42,7 +42,7 @@ public class DataInitializer implements CommandLineRunner {
                 45.0,
                 1,
                 6,
-                "OPEN_SPACE",
+                OfficeType.STANDARD,
                 true,
                 1200.0,
                 OfficeStatus.FREE,
@@ -55,9 +55,9 @@ public class DataInitializer implements CommandLineRunner {
                 office101,
                 1,
                 100.0,
-                120.0,
-                180.0,
-                120.0
+                268.0,
+                113.0,
+                108.0
         );
 
         floorPlanRepository.save(fp101);
@@ -69,7 +69,7 @@ public class DataInitializer implements CommandLineRunner {
                 30.0,
                 1,
                 4,
-                "PRIVATE",
+                OfficeType.MEETING_ROOM,
                 false,
                 900.0,
                 OfficeStatus.FREE,
@@ -81,10 +81,10 @@ public class DataInitializer implements CommandLineRunner {
         FloorPlan fp102 = new FloorPlan(
                 office102,
                 1,
-                320.0,
-                120.0,
-                140.0,
-                120.0
+                485.0,
+                630.0,
+                183.0,
+                96.0
         );
 
         floorPlanRepository.save(fp102);
@@ -96,7 +96,7 @@ public class DataInitializer implements CommandLineRunner {
                 60.0,
                 1,
                 10,
-                "CONFERENCE",
+                OfficeType.SERVER_ROOM,
                 true,
                 2000.0,
                 OfficeStatus.FREE,
@@ -108,10 +108,10 @@ public class DataInitializer implements CommandLineRunner {
         FloorPlan fp103 = new FloorPlan(
                 office103,
                 1,
-                520.0,
-                120.0,
-                220.0,
-                140.0
+                178.0,
+                628.0,
+                140.0,
+                96.0
         );
 
         floorPlanRepository.save(fp103);

@@ -11,67 +11,70 @@
 <body>
 
 <div class="profile-sidebar">
-    <a href="/profile" class="profile-link">Profile</a>
+    <a href="/profile" class="profile-link">Профиль</a>
 </div>
 
-<h1 style="text-align:center;">Building Floor Plan</h1>
+<h1 style="text-align:center;">План этажа</h1>
 
 <div class="filters-sidebar">
     <button type="button" class="filters-toggle-btn" id="filters-toggle-btn">
-        Show filters
+        Использовать фильтры
     </button>
 
     <div class="filters-panel" id="filters-panel">
         <form method="get" action="/floor-plan" class="filters-form">
 
-            <h3>Filters</h3>
+            <h3>Фильтры</h3>
 
-            <label>Status:</label>
+            <label>Статус:</label>
             <select name="status">
-                <option value="" th:selected="${param.status == null || param.status[0] == ''}">ALL</option>
-                <option value="FREE" th:selected="${param.status != null && param.status[0] == 'FREE'}">FREE</option>
-                <option value="OCCUPIED" th:selected="${param.status != null && param.status[0] == 'OCCUPIED'}">OCCUPIED</option>
+                <option value="" th:selected="${param.status == null || param.status[0] == ''}">Все</option>
+                <option value="FREE" th:selected="${param.status != null && param.status[0] == 'FREE'}">Свободно</option>
+                <option value="OCCUPIED" th:selected="${param.status != null && param.status[0] == 'OCCUPIED'}">Занято</option>
             </select>
 
-            <label>Floor:</label>
-            <input type="number" name="floor" placeholder="Floor"
+            <label>Этаж:</label>
+            <input type="number" name="floor" placeholder="Этаж"
                    th:value="${param.floor != null ? param.floor[0] : ''}">
 
-            <label>Min area:</label>
-            <input type="number" name="minArea" placeholder="Min area"
+            <label>Мин. площадь:</label>
+            <input type="number" name="minArea" placeholder="Мин. площадь"
                    th:value="${param.minArea != null ? param.minArea[0] : ''}">
 
-            <label>Max area:</label>
-            <input type="number" name="maxArea" placeholder="Max area"
+            <label>Макс. площадь:</label>
+            <input type="number" name="maxArea" placeholder="Макс. площадь"
                    th:value="${param.maxArea != null ? param.maxArea[0] : ''}">
 
-            <label>Min capacity:</label>
-            <input type="number" name="minCapacity" placeholder="Min capacity"
+            <label>Мин. вместимость:</label>
+            <input type="number" name="minCapacity" placeholder="Мин. вместимость"
                    th:value="${param.minCapacity != null ? param.minCapacity[0] : ''}">
 
-            <label>Office type:</label>
+            <label>Тип помещения:</label>
             <select name="officeType">
-                <option value="" th:selected="${param.officeType == null || param.officeType[0] == ''}">Any type</option>
-                <option value="STANDARD" th:selected="${param.officeType != null && param.officeType[0] == 'STANDARD'}">STANDARD</option>
-                <option value="OPENSPACE" th:selected="${param.officeType != null && param.officeType[0] == 'OPENSPACE'}">OPENSPACE</option>
+                <option value="" th:selected="${param.officeType == null || param.officeType[0] == ''}">Любой</option>
+                <option value="STANDARD" th:selected="${param.officeType != null && param.officeType[0] == 'STANDARD'}">Открытый офис</option>
+                <option value="MEETING_ROOM" th:selected="${param.officeType != null && param.officeType[0] == 'MEETING_ROOM'}">Переговорная</option>
+                <option value="REST_ZONE" th:selected="${param.officeType != null && param.officeType[0] == 'REST_ZONE'}">Зона отдыха</option>
+                <option value="SERVER_ROOM" th:selected="${param.officeType != null && param.officeType[0] == 'SERVER_ROOM'}">Серверная</option>
+                <option value="WAREHOUSE" th:selected="${param.officeType != null && param.officeType[0] == 'WAREHOUSE'}">Склад</option>
             </select>
 
-            <label>Furniture:</label>
+            <label>Фурнитура:</label>
             <select name="hasFurniture">
-                <option value="" th:selected="${param.hasFurniture == null || param.hasFurniture[0] == ''}">Furniture</option>
-                <option value="true" th:selected="${param.hasFurniture != null && param.hasFurniture[0] == 'true'}">Yes</option>
-                <option value="false" th:selected="${param.hasFurniture != null && param.hasFurniture[0] == 'false'}">No</option>
+                <option value="" th:selected="${param.hasFurniture == null || param.hasFurniture[0] == ''}">Фурнитура</option>
+                <option value="true" th:selected="${param.hasFurniture != null && param.hasFurniture[0] == 'true'}">Да</option>
+                <option value="false" th:selected="${param.hasFurniture != null && param.hasFurniture[0] == 'false'}">Нет</option>
             </select>
 
-            <label>Min price:</label>
+            <label>Мин. цена:</label>
             <input type="number" name="minPrice" th:value="${param.minPrice != null ? param.minPrice[0] : ''}">
 
-            <label>Max price:</label>
+            <label>Макс. цена:</label>
             <input type="number" name="maxPrice" th:value="${param.maxPrice != null ? param.maxPrice[0] : ''}">
 
             <div class="filters-actions">
-                <button type="submit">Apply</button>
-                <a href="/floor-plan">Reset</a>
+                <button type="submit">Применить</button>
+                <a href="/floor-plan">Сбросить</a>
             </div>
         </form>
     </div>
@@ -105,25 +108,25 @@
 </div>
 
 <div class="info-panel" onclick="event.stopPropagation()">
-    <h3>Office Info</h3>
+    <h3>Параметры помещения</h3>
 
-    <p><b>Number:</b> <span id="office-number">-</span></p>
-    <p><b>Area:</b> <span id="office-area">-</span></p>
-    <p><b>Price:</b> <span id="office-price">-</span></p>
-    <p><b>Floor:</b> <span id="office-floor">-</span></p>
-    <p><b>Type:</b> <span id="office-type">-</span></p>
+    <p><b>Номер:</b> <span id="office-number">-</span></p>
+    <p><b>Площадь:</b> <span id="office-area">-</span></p>
+    <p><b>Цена:</b> <span id="office-price">-</span></p>
+    <p><b>Этаж:</b> <span id="office-floor">-</span></p>
+    <p><b>Тип:</b> <span id="office-type">-</span></p>
 
     <hr>
 
     <form method="post" action="/applications/create" sec:authorize="isAuthenticated()">
         <input type="hidden" id="office-id-input" name="officeId">
-        <textarea name="comment" placeholder="Comment"></textarea>
+        <textarea name="comment" placeholder="Комментарий"></textarea>
         <br><br>
-        <button type="submit">Apply for Rent</button>
+        <button type="submit">Подать заявку</button>
     </form>
 
     <p sec:authorize="!isAuthenticated()">
-        Please log in to apply for rent.
+        Пожалуйста, войдите, чтоб подать заявку.
     </p>
 </div>
 

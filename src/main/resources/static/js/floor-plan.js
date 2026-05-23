@@ -6,7 +6,7 @@ const filtersToggleBtn = document.getElementById('filters-toggle-btn');
 filtersToggleBtn.addEventListener('click', () => {
     const isOpen = filtersPanel.style.display === 'block';
     filtersPanel.style.display = isOpen ? 'none' : 'block';
-    filtersToggleBtn.innerText = isOpen ? 'Show filters' : 'Hide filters';
+    filtersToggleBtn.innerText = isOpen ? 'Использовать фильтры' : 'Скрыть фильтры';
 });
 
 function showOfficeInfo(element, event) {

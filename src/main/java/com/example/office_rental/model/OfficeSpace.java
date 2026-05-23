@@ -28,8 +28,9 @@ public class OfficeSpace {
     @Column(nullable = false)
     private Integer capacity;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String officeType;
+    private OfficeType officeType;
 
     @Column(nullable = false)
     private Boolean hasFurniture;
@@ -54,7 +55,7 @@ public class OfficeSpace {
             Double area,
             Integer floor,
             Integer capacity,
-            String officeType,
+            OfficeType officeType,
             Boolean hasFurniture,
             Double rentalPrice,
             OfficeStatus status,

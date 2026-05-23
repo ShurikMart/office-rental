@@ -2,128 +2,224 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-
     <title>Floor Editor</title>
-
-    <link rel="stylesheet" href="/css/floor-plan.css">
-
+    <link rel="stylesheet" href="/css/floor-editor.css">
 </head>
 
 <body>
 
-<h1>Floor Plan Editor</h1>
-
-<div class="toolbar">
-    <button onclick="setMode('draw')">Draw</button>
-    <button onclick="setMode('edit')">Edit</button>
-    <button onclick="setMode('delete')">Delete</button>
+<div class="profile-sidebar">
+    <a href="/profile" class="profile-link">Profile</a>
 </div>
 
-<div id="edit-panel" style="display:none;">
-    <h3>Edit Office</h3>
+<h1 class="page-title">Floor Plan Editor</h1>
 
-    <input type="hidden" id="edit-office-id">
+<div class="editor-layout">
 
-    <input type="text" id="edit-number" placeholder="Number">
-    <input type="number" id="edit-area" placeholder="Area">
-    <input type="number" id="edit-floor" placeholder="Floor">
-    <input type="number" id="edit-capacity" placeholder="Capacity">
-    <input type="text" id="edit-type" placeholder="Office type">
+    <div class="editor-sidebar">
 
-    <label>
-        <input type="checkbox" id="edit-furniture">
-        Has furniture
-    </label>
+        <div class="toolbar">
+            <button type="button"
+                    class="toolbar-btn"
+                    onclick="setMode('draw')">
 
-    <input type="number" id="edit-price" placeholder="Price">
+                Рисовать
 
-    <select id="edit-status">
-        <option value="FREE">FREE</option>
-        <option value="OCCUPIED">OCCUPIED</option>
-    </select>
+            </button>
 
-    <button onclick="updateOffice()">Save changes</button>
-    <button onclick="deleteOffice()">Delete</button>
-</div>
+            <button type="button"
+                    class="toolbar-btn"
+                    onclick="setMode('edit')">
 
-<div class="toolbar">
+                Редактировать
 
-    <label>Office:</label>
+            </button>
 
-    <select id="office-select">
+            <button type="button"
+                    class="toolbar-btn danger-btn"
+                    onclick="setMode('delete')">
 
-        <option
-                th:each="office : ${offices}"
-                th:value="${office.id}"
-                th:text="${office.number}">
-        </option>
+                Удалить
 
-    </select>
+            </button>
+        </div>
 
-    <button onclick="saveSelection()">
-        Save
-    </button>
 
-</div>
+        <div id="draw-toolbar" class="mode-panel">
 
-<hr>
+            <h3>Создание помещения</h3>
 
-<h3>Create Office</h3>
+            <select id="new-building">
+                <option th:each="building : ${buildings}"
+                        th:value="${building.id}"
+                        th:text="${building.name}">
+                </option>
+            </select>
 
-<div class="toolbar">
+            <input type="text"
+                   id="new-number"
+                   placeholder="Номер офиса">
 
-    <select id="new-building">
-        <option th:each="building : ${buildings}"
-                th:value="${building.id}"
-                th:text="${building.name}">
-        </option>
-    </select>
+            <input type="number"
+                   id="new-area"
+                   placeholder="Площадь">
 
-    <input type="text" id="new-number" placeholder="Office number">
-    <input type="number" id="new-area" placeholder="Area">
-    <input type="number" id="new-floor" placeholder="Floor">
-    <input type="number" id="new-capacity" placeholder="Capacity">
-    <input type="text" id="new-type" placeholder="Office type">
+            <input type="number"
+                   id="new-floor"
+                   placeholder="Этаж">
 
-    <label style="margin-left:10px;">
-        <input type="checkbox" id="new-furniture">
-        Has furniture
-    </label>
+            <input type="number"
+                   id="new-capacity"
+                   placeholder="Вместимость">
 
-    <input type="number" id="new-price" placeholder="Price">
+            <input type="number"
+                   id="new-price"
+                   placeholder="Цена">
 
-    <select id="new-status">
-        <option value="FREE">FREE</option>
-        <option value="OCCUPIED">OCCUPIED</option>
-    </select>
+            <select id="new-type">
+                <option value="STANDARD">Открытый офис</option>
+                <option value="MEETING_ROOM">Переговорная</option>
+                <option value="REST_ZONE">Зона отдыха</option>
+                <option value="SERVER_ROOM">Серверная</option>
+                <option value="WAREHOUSE">Склад</option>
+            </select>
 
-    <button onclick="createOffice()">Create Office</button>
-</div>
-<div id="save-status"></div>
+            <label>
+                Наличие фурнитуры
+                <input type="checkbox" id="new-furniture">
+            </label>
 
-<div
-        class="plan-container"
-        id="plan-container"
+            <select id="new-status">
+                <option value="FREE">Свободно</option>
+                <option value="OCCUPIED">Занято</option>
+            </select>
 
-        style="
-            background-image:
-            url('/images/floor1.png');
-        ">
+            <button type="button"
+                    class="toolbar-btn action-btn"
+                    onclick="createOffice()">
 
-    <div
-            th:each="plan : ${floorPlans}"
-            class="office-box"
-            th:data-id="${plan.officeSpace.id}"
-            th:style="
-            'left:' + ${plan.x} + 'px;' +
-            'top:' + ${plan.y} + 'px;' +
-            'width:' + ${plan.width} + 'px;' +
-            'height:' + ${plan.height} + 'px;'
-        "
-            th:onclick="'onOfficeClick(this, event)'">
+                Создать помещение
 
-        <div class="office-label"
-             th:text="${plan.officeSpace.number}">
+            </button>
+
+            <hr>
+
+            <h3>Место помещения на плане</h3>
+
+            <select id="office-select">
+
+                <option value="">
+                    Выбрать офис
+                </option>
+
+                <option th:each="office : ${offices}"
+                        th:value="${office.id}"
+                        th:text="${office.number}">
+                </option>
+
+            </select>
+
+            <button type="button"
+                    class="toolbar-btn action-btn"
+                    onclick="saveSelection()">
+
+                Сохранить расположение
+
+            </button>
+
+        </div>
+
+
+        <div id="edit-toolbar"
+             class="mode-panel"
+             style="display:none;">
+
+            <h3>Редактировать помещение</h3>
+
+            <input type="hidden" id="edit-office-id">
+
+            <input type="text"
+                   id="edit-number"
+                   placeholder="Номер">
+
+            <input type="number"
+                   id="edit-area"
+                   placeholder="Площадь">
+
+            <input type="number"
+                   id="edit-floor"
+                   placeholder="Этаж">
+
+            <input type="number"
+                   id="edit-capacity"
+                   placeholder="Вместимость">
+
+            <input type="number"
+                   id="edit-price"
+                   placeholder="Цена">
+
+            <select id="edit-type">
+                <option value="STANDARD">Открытый офис</option>
+                <option value="MEETING_ROOM">Переговорная</option>
+                <option value="REST_ZONE">Зона отдыха</option>
+                <option value="SERVER_ROOM">Серверная</option>
+                <option value="WAREHOUSE">Склад</option>
+            </select>
+
+            <label>
+                Наличие фурнитуры
+                <input type="checkbox" id="edit-furniture">
+            </label>
+
+            <select id="edit-status">
+                <option value="FREE">Свободно</option>
+                <option value="OCCUPIED">Занято</option>
+            </select>
+
+            <button type="button"
+                    class="toolbar-btn action-btn"
+                    onclick="updateOffice()">
+
+                Сохранить изменения
+
+            </button>
+
+            <button type="button"
+                    class="toolbar-btn danger-btn"
+                    onclick="deleteOffice()">
+
+                Удалить помещение
+
+            </button>
+
+        </div>
+
+        <div id="save-status"></div>
+
+    </div>
+
+    <div class="plan-shell">
+
+        <div class="plan-container"
+             id="plan-container"
+             style="background-image:url('/images/floor1.png');">
+
+            <div th:each="plan : ${floorPlans}"
+                 class="office-box"
+                 th:data-id="${plan.officeSpace.id}"
+                 th:style="
+                    'left:' + ${plan.x} + 'px;' +
+                    'top:' + ${plan.y} + 'px;' +
+                    'width:' + ${plan.width} + 'px;' +
+                    'height:' + ${plan.height} + 'px;'"
+                 th:onclick="'onOfficeClick(this, event)'">
+
+                <div class="office-label"
+                     th:text="${plan.officeSpace.number}">
+                </div>
+
+            </div>
+
         </div>
 
     </div>
