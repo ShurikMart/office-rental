@@ -118,14 +118,16 @@
 
     <hr>
 
-    <form method="post" action="/applications/create" sec:authorize="isAuthenticated()">
-        <input type="hidden" id="office-id-input" name="officeId">
-        <textarea name="comment" placeholder="Комментарий"></textarea>
-        <br><br>
-        <button type="submit">Подать заявку</button>
-    </form>
+    <div th:if="${isUser}">
+        <form method="post" action="/applications/create">
+            <input type="hidden" id="office-id-input" name="officeId">
+            <textarea name="comment" placeholder="Комментарий"></textarea>
+            <br><br>
+            <button type="submit">Подать заявку</button>
+        </form>
+    </div>
 
-    <p sec:authorize="!isAuthenticated()">
+    <p th:if="${!isAdmin and !isUser}">
         Пожалуйста, войдите, чтоб подать заявку.
     </p>
 </div>

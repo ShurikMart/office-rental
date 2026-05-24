@@ -142,10 +142,15 @@ public class OfficeController {
                                                 .equals("ROLE_ADMIN")
                                 );
 
-        model.addAttribute(
-                "isAdmin",
-                isAdmin
-        );
+        boolean isUser =
+                authentication != null
+                        &&
+                        authentication.getAuthorities()
+                                .stream()
+                                .anyMatch(a -> a.getAuthority().equals("ROLE_USER"));
+
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("isUser", isUser);
 
         return "offices/floor-plan";
     }

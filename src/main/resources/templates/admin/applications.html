@@ -5,105 +5,71 @@
 
 <head>
     <title>Applications</title>
+    <link rel="stylesheet" href="/css/list.css">
 </head>
 
 <body>
-
-<div th:if="${success}"
-     style="
-        background:#d4edda;
-        color:#155724;
-        padding:10px;
-        margin-bottom:15px;
-        border-radius:5px;
-     ">
-
-    <span th:text="${success}"></span>
-
-</div>
-
-<div th:if="${error}"
-     style="
-        background:#f8d7da;
-        color:#721c24;
-        padding:10px;
-        margin-bottom:15px;
-        border-radius:5px;
-     ">
-
-    <span th:text="${error}"></span>
-
-</div>
-
-<h1>Rental Applications</h1>
+<h1>Заявки на помещения</h1>
 
 <hr>
 
-<table border="1">
+<div class="table-container">
+    <table>
 
-    <tr>
+        <tr>
+            <th>ID</th>
+            <th>Пользователь</th>
+            <th>Помещение</th>
+            <th>Комментарий</th>
+            <th>Статус</th>
+            <th>Действия</th>
+        </tr>
 
-        <th>ID</th>
-        <th>User</th>
-        <th>Office</th>
-        <th>Status</th>
-        <th>Actions</th>
+        <tr th:each="app : ${applications}">
+            <td th:text="${app.id}"></td>
+            <td th:text="${app.user.username}"></td>
+            <td th:text="${app.officeSpace.number}"></td>
+            <td th:text="${app.comment != null && !#strings.isEmpty(app.comment) ? app.comment : 'Нет комментария'}"></td>
+            <td th:text="${app.status}"></td>
 
-    </tr>
+            <td>
+                <form
+                        th:if="${app.status.name() == 'PENDING'}"
+                        th:action="@{'/admin/applications/' + ${app.id} + '/approve'}"
+                        method="post">
 
-    <tr th:each="app : ${applications}">
+                    <button type="submit">Одобрить</button>
+                </form>
 
-        <td th:text="${app.id}"></td>
+                <form
+                        th:if="${app.status.name() == 'PENDING'}"
+                        th:action="@{'/admin/applications/' + ${app.id} + '/reject'}"
+                        method="post">
 
-        <td th:text="${app.user.username}"></td>
+                    <button type="submit">Откланить</button>
+                </form>
 
-        <td th:text="${app.officeSpace.number}"></td>
+                <form
+                        th:if="${app.officeSpace.status.name() == 'OCCUPIED'}"
+                        th:action="@{/admin/offices/release/{id}(id=${app.officeSpace.id})}"
+                        method="post">
 
-        <td th:text="${app.status}"></td>
+                    <button type="submit">Освободить помещение</button>
+                </form>
+            </td>
+        </tr>
 
-        <td>
+    </table>
+</div>
 
-            <form
-                    th:if="${app.status.name() == 'PENDING'}"
-                    th:action="@{'/admin/applications/' + ${app.id} + '/approve'}"
-                    method="post"
-                    style="display:inline;">
+<div th:if="${success}">
+    <span th:text="${success}"></span>
+</div>
 
-                <button type="submit">
-                    Approve
-                </button>
+<div th:if="${error}">
+    <span th:text="${error}"></span>
+</div>
 
-            </form>
-
-            <form
-                    th:if="${app.status.name() == 'PENDING'}"
-                    th:action="@{'/admin/applications/' + ${app.id} + '/reject'}"
-                    method="post"
-                    style="display:inline;">
-
-                <button type="submit">
-                    Reject
-                </button>
-
-            </form>
-
-            <form
-                    th:if="${app.officeSpace.status.name() == 'OCCUPIED'}"
-                    th:action="@{/admin/offices/release/{id}(id=${app.officeSpace.id})}"
-                    method="post"
-                    style="display:inline;">
-
-                <button type="submit">
-                    Release Office
-                </button>
-
-            </form>
-
-        </td>
-
-    </tr>
-
-</table>
 
 </body>
 </html>

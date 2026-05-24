@@ -5,54 +5,47 @@
 
 <head>
     <title>My Applications</title>
+    <link rel="stylesheet" href="/css/list.css">
 </head>
 
 <body>
 
-<h1>My Rental Applications</h1>
+<h1>Мои заявки аренды</h1>
 
 <hr>
 
-<table border="1">
+<div class="table-container">
+    <table>
 
-    <tr>
+        <tr>
+            <th>ID</th>
+            <th>Помещение</th>
+            <th>Комментарий</th>
+            <th>Статус</th>
+            <th>Время взаимодействия</th>
+            <th>Действия</th>
+        </tr>
 
-        <th>ID</th>
-        <th>Office</th>
-        <th>Status</th>
-        <th>Created</th>
-        <th>Actions</th>
+        <tr th:each="app : ${applications}">
+            <td th:text="${app.id}"></td>
+            <td th:text="${app.officeSpace.number}"></td>
+            <td th:text="${app.comment != null && !#strings.isEmpty(app.comment) ? app.comment : 'Нет комментария'}"></td>
+            <td th:text="${app.status}"></td>
+            <td th:text="${app.createdAt}"></td>
+            <td>
 
-    </tr>
+                <form
+                        th:if="${app.officeSpace.status.name() == 'OCCUPIED'}"
+                        th:action="@{/applications/release/{id}(id=${app.officeSpace.id})}"
+                        method="post">
 
-    <tr th:each="app : ${applications}">
+                    <button type="submit">Освободить помещение</button>
 
-        <td th:text="${app.id}"></td>
+                </form>
+            </td>
+        </tr>
+    </table>
 
-        <td th:text="${app.officeSpace.number}"></td>
-
-        <td th:text="${app.status}"></td>
-
-        <td th:text="${app.createdAt}"></td>
-
-        <td>
-
-            <form
-                    th:if="${app.officeSpace.status.name() == 'OCCUPIED'}"
-                    th:action="@{/applications/release/{id}(id=${app.officeSpace.id})}"
-                    method="post">
-
-                <button type="submit">
-                    Release Office
-                </button>
-
-            </form>
-
-        </td>
-
-    </tr>
-
-</table>
-
+</div>
 </body>
 </html>

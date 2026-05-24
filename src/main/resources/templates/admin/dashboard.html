@@ -5,107 +5,68 @@
         xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-
     <title>Admin Dashboard</title>
-
+    <link rel="stylesheet" href="/css/dashboard.css">
 </head>
 
 <body>
 
-<h1>Admin Dashboard</h1>
+<h1>Инструментарий админа</h1>
 
-<hr>
+<div class="dashboard-section">
+    <h3>Статистика по помещениям</h3>
 
-<h3>Office Statistics</h3>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <p><b>Всего помещений:</b></p>
+            <span class="stat-value" th:text="${totalOffices}"></span>
+        </div>
 
-<p>
-    <b>Total Offices:</b>
+        <div class="stat-card">
+            <p><b>Свободных помещений:</b></p>
+            <span class="stat-value" th:text="${freeOffices}"></span>
+        </div>
 
-    <span th:text="${totalOffices}"></span>
-</p>
+        <div class="stat-card">
+            <p><b>Занятых офисов:</b></p>
+            <span class="stat-value" th:text="${occupiedOffices}"></span>
+        </div>
+    </div>
+</div>
 
-<p>
-    <b>Free Offices:</b>
+<div class="dashboard-section">
+    <h3>Навигация</h3>
+    <ul>
+        <li><a href="/admin/floor-editor">Редактор схемы</a></li>
+        <li><a href="/floor-plan">Схема помещений</a></li>
+        <li><a href="/profile">Профиль пользователя</a></li>
+        <li><a href="/admin/applications">Управление заявками</a></li>
+    </ul>
+</div>
 
-    <span th:text="${freeOffices}"></span>
-</p>
+<div class="dashboard-section">
+    <h3>Отчет по приложению</h3>
 
-<p>
-    <b>Occupied Offices:</b>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <p><b>В обработке:</b></p>
+            <span class="stat-value" th:text="${pendingApplications}"></span>
+        </div>
 
-    <span th:text="${occupiedOffices}"></span>
-</p>
+        <div class="stat-card">
+            <p><b>Одобрено:</b></p>
+            <span class="stat-value" th:text="${approvedApplications}"></span>
+        </div>
 
-<hr>
-
-<h3>Navigation</h3>
-
-<ul>
-
-    <li>
-
-        <a href="/admin/floor-editor">
-            Floor Editor
-        </a>
-
-    </li>
-
-    <li>
-
-        <a href="/floor-plan">
-            Floor Plan
-        </a>
-
-    </li>
-
-    <li>
-
-        <a href="/profile">
-            User Profile
-        </a>
-
-    </li>
-
-    <li>
-
-        <a href="/admin/applications">
-            Manage Applications
-        </a>
-
-    </li>
-
-</ul>
-
-<hr>
-
-<h3>Applications Report</h3>
-
-<p>
-    <b>Pending:</b>
-
-    <span th:text="${pendingApplications}"></span>
-</p>
-
-<p>
-    <b>Approved:</b>
-
-    <span th:text="${approvedApplications}"></span>
-</p>
-
-<p>
-    <b>Rejected:</b>
-
-    <span th:text="${rejectedApplications}"></span>
-</p>
-
-<hr>
+        <div class="stat-card">
+            <p><b>Отклонено:</b></p>
+            <span class="stat-value" th:text="${rejectedApplications}"></span>
+        </div>
+    </div>
+</div>
 
 <form method="post" action="/logout">
-
-    <button type="submit">
-        Logout
-    </button>
-
+    <button type="submit">Выйти</button>
 </form>
 
 </body>

@@ -2,28 +2,55 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Offices</title>
+    <link rel="stylesheet" href="/css/list.css">
 </head>
 <body>
 
-<h1>Office List</h1>
+<h1>Список помещений</h1>
 
-<table border="1">
+<div class="table-container">
 
-    <tr>
-        <th>Number</th>
-        <th>Area</th>
-        <th>Floor</th>
-        <th>Price</th>
-    </tr>
+    <table>
+        <tr>
+            <th>Номер</th>
+            <th>Площадь</th>
+            <th>Этаж</th>
+            <th>Вместимость</th>
+            <th>Тип</th>
+            <th>Мебель</th>
+            <th>Цена</th>
+            <th>Статус</th>
+            <th>Здание</th>
+        </tr>
 
-    <tr th:each="office : ${offices}">
-        <td th:text="${office.number}"></td>
-        <td th:text="${office.area}"></td>
-        <td th:text="${office.floor}"></td>
-        <td th:text="${office.rentalPrice}"></td>
-    </tr>
+        <tr th:each="office : ${offices}">
+            <td th:text="${office.number}"></td>
+            <td th:text="${office.area}"></td>
+            <td th:text="${office.floor}"></td>
+            <td th:text="${office.capacity}"></td>
 
-</table>
+            <td>
+                <span th:switch="${office.officeType.name()}">
+                    <span th:case="'STANDARD'">Открытый офис</span>
+                    <span th:case="'MEETING_ROOM'">Переговорная</span>
+                    <span th:case="'REST_ZONE'">Зона отдыха</span>
+                    <span th:case="'SERVER_ROOM'">Серверная</span>
+                    <span th:case="'WAREHOUSE'">Склад</span>
+                </span>
+            </td>
+
+            <td th:text="${office.hasFurniture ? 'Да' : 'Нет'}"></td>
+            <td th:text="${office.rentalPrice}"></td>
+
+            <td>
+                <span th:if="${office.status.name() == 'FREE'}" class="free-status">Свободно</span>
+                <span th:if="${office.status.name() == 'OCCUPIED'}" class="occupied-status">Занято</span>
+            </td>
+
+            <td th:text="${office.building.name}"></td>
+        </tr>
+    </table>
+</div>
 
 </body>
 </html>

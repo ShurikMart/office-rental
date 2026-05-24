@@ -3,55 +3,20 @@
 
 <head>
     <title>Register</title>
+    <link rel="stylesheet" href="/css/auth.css">
 </head>
 
 <body>
+<div class="auth-card">
+    <h1>Регистрация</h1>
 
-<h1>Register</h1>
+    <form th:action="@{/register}" th:object="${user}" method="post" class="auth-stack">
+        <input type="text" th:field="*{username}" placeholder="Имя">
+        <input type="email" th:field="*{email}" placeholder="Эл. почта">
+        <input type="password" th:field="*{password}" placeholder="Пароль">
 
-<form
-        th:action="@{/register}"
-        th:object="${user}"
-        method="post">
-
-    <div>
-
-        <input
-                type="text"
-                th:field="*{username}"
-                placeholder="Username">
-
-    </div>
-
-    <br>
-
-    <div>
-
-        <input
-                type="email"
-                th:field="*{email}"
-                placeholder="Email">
-
-    </div>
-
-    <br>
-
-    <div>
-
-        <input
-                type="password"
-                th:field="*{password}"
-                placeholder="Password">
-
-    </div>
-
-    <br>
-
-    <button type="submit">
-        Register
-    </button>
-
-</form>
-
+        <button type="submit" class="auth-primary-btn">Регистрация</button>
+    </form>
+</div>
 </body>
 </html>

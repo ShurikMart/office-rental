@@ -7,44 +7,45 @@
 <head>
 
     <title>Profile</title>
+    <link rel="stylesheet" href="/css/profile.css">
 
 </head>
 
 <body>
 
-<h1>User Profile</h1>
+<h1>Профиль пользователя</h1>
 
 <hr>
 
-<h3>User Information</h3>
+<h3>Информация о пользователе</h3>
 
 <p>
-    <b>Username:</b>
+    <b>Имя:</b>
 
     <span th:text="${user.username}"></span>
 </p>
 
 <p>
-    <b>Email:</b>
+    <b>Эл. почта:</b>
 
     <span th:text="${user.email}"></span>
 </p>
 
 <p>
-    <b>Role:</b>
+    <b>Роль:</b>
 
     <span th:text="${user.role}"></span>
 </p>
 
 <hr>
 
-<h3>Navigation</h3>
+<h3>Навигация</h3>
 <ul>
 
     <li>
 
         <a href="/floor-plan">
-            View Floor Plan
+            Просмотреть план здания
         </a>
 
     </li>
@@ -52,7 +53,7 @@
     <li sec:authorize="hasRole('USER')">
 
         <a href="/applications/my">
-            My Applications
+            Мои заявки
         </a>
 
     </li>
@@ -60,7 +61,15 @@
     <li sec:authorize="hasRole('ADMIN')">
 
         <a href="/admin/dashboard">
-            Admin Dashboard
+            Инструментарий админа
+        </a>
+
+    </li>
+
+    <li sec:authorize="hasRole('ADMIN')">
+
+        <a href="/offices">
+            Список помещений
         </a>
 
     </li>
@@ -72,7 +81,7 @@
 <form method="post" action="/logout">
 
     <button type="submit">
-        Logout
+        Выйти
     </button>
 
 </form>
