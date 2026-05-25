@@ -25,20 +25,11 @@ public class AdminController {
     @GetMapping("/floor-editor")
     public String floorEditor(Model model) {
 
-        model.addAttribute(
-                "offices",
-                officeSpaceRepository.findAll()
-        );
+        model.addAttribute("offices", officeSpaceRepository.findAll());
 
-        model.addAttribute(
-                "floorPlans",
-                floorPlanRepository.findAll()
-        );
+        model.addAttribute("floorPlans", floorPlanRepository.findAll());
 
-        model.addAttribute(
-                "buildings",
-                buildingRepository.findAll()
-        );
+        model.addAttribute("buildings", buildingRepository.findAll());
 
         return "admin/floor-editor";
     }
@@ -47,14 +38,9 @@ public class AdminController {
     @ResponseBody
     public String saveFloorPlan(@RequestBody FloorPlanDto dto) {
 
-        OfficeSpace office =
-                officeSpaceRepository.findById(dto.getOfficeId())
-                        .orElseThrow();
+        OfficeSpace office = officeSpaceRepository.findById(dto.getOfficeId()).orElseThrow();
 
-        FloorPlan floorPlan =
-                floorPlanRepository
-                        .findByOfficeSpaceId(dto.getOfficeId())
-                        .orElse(new FloorPlan());
+        FloorPlan floorPlan = floorPlanRepository.findByOfficeSpaceId(dto.getOfficeId()).orElse(new FloorPlan());
 
         floorPlan.setOfficeSpace(office);
 
@@ -77,9 +63,7 @@ public class AdminController {
             @RequestBody CreateOfficeDto dto
     ) {
 
-        Building building =
-                buildingRepository.findById(dto.getBuildingId())
-                        .orElseThrow();
+        Building building = buildingRepository.findById(dto.getBuildingId()).orElseThrow();
 
         OfficeSpace office = new OfficeSpace(
                 dto.getNumber(),

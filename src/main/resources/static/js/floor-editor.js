@@ -15,11 +15,8 @@ function setMode(newMode) {
 
     mode = newMode;
 
-    document.getElementById('draw-toolbar').style.display =
-        newMode === 'draw' ? 'flex' : 'none';
-
-    document.getElementById('edit-toolbar').style.display =
-        newMode === 'edit' ? 'flex' : 'none';
+    document.getElementById('draw-toolbar').style.display = newMode === 'draw' ? 'flex' : 'none';
+    document.getElementById('edit-toolbar').style.display = newMode === 'edit' ? 'flex' : 'none';
 
     clearSelection();
 }
@@ -32,7 +29,6 @@ function clearSelection() {
     }
 
     selection = null;
-
     isDrawing = false;
 }
 
@@ -48,8 +44,7 @@ function onOfficeClick(element, event) {
 
     if (mode === 'delete') {
 
-        const confirmed =
-            confirm('Delete this office?');
+        const confirmed = confirm('Вы уверены, что хотите удалить это помещение ?');
 
         if (confirmed) {
             deleteOfficeById(officeId);
@@ -71,71 +66,38 @@ container.addEventListener('mousedown', (e) => {
 
     isDrawing = true;
 
-    const rect =
-        container.getBoundingClientRect();
+    const rect = container.getBoundingClientRect();
 
     startX = e.clientX - rect.left;
     startY = e.clientY - rect.top;
 
-    currentBox =
-        document.createElement('div');
+    currentBox = document.createElement('div');
 
-    currentBox.className =
-        'selection-box';
-
-    currentBox.style.left =
-        startX + 'px';
-
-    currentBox.style.top =
-        startY + 'px';
+    currentBox.className = 'selection-box';
+    currentBox.style.left = startX + 'px';
+    currentBox.style.top = startY + 'px';
 
     container.appendChild(currentBox);
 });
 
 container.addEventListener('mousemove', (e) => {
 
-    if (
-        mode !== 'draw'
-        ||
-        !isDrawing
-        ||
-        !currentBox
-    ) {
+    if (mode !== 'draw' || !isDrawing || !currentBox) {
         return;
     }
 
-    const rect =
-        container.getBoundingClientRect();
+    const rect = container.getBoundingClientRect();
+    const currentX = e.clientX - rect.left;
+    const currentY = e.clientY - rect.top;
+    const width = currentX - startX;
+    const height = currentY - startY;
+    const left = width < 0 ? currentX : startX;
+    const top = height < 0 ? currentY : startY;
 
-    const currentX =
-        e.clientX - rect.left;
-
-    const currentY =
-        e.clientY - rect.top;
-
-    const width =
-        currentX - startX;
-
-    const height =
-        currentY - startY;
-
-    const left =
-        width < 0 ? currentX : startX;
-
-    const top =
-        height < 0 ? currentY : startY;
-
-    currentBox.style.left =
-        left + 'px';
-
-    currentBox.style.top =
-        top + 'px';
-
-    currentBox.style.width =
-        Math.abs(width) + 'px';
-
-    currentBox.style.height =
-        Math.abs(height) + 'px';
+    currentBox.style.left = left + 'px';
+    currentBox.style.top = top + 'px';
+    currentBox.style.width = Math.abs(width) + 'px';
+    currentBox.style.height = Math.abs(height) + 'px';
 
     selection = {
         x: left,
@@ -153,8 +115,7 @@ async function createOffice() {
 
     try {
 
-        const response =
-            await fetch('/admin/offices/create', {
+        const response = await fetch('/admin/offices/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -193,14 +154,9 @@ async function createOffice() {
             throw new Error();
         }
 
-        const office =
-            await response.json();
-
-        const select =
-            document.getElementById('office-select');
-
-        const option =
-            document.createElement('option');
+        const office = await response.json();
+        const select = document.getElementById('office-select');
+        const option = document.createElement('option');
 
         option.value = office.id;
         option.text = office.number;
@@ -208,51 +164,34 @@ async function createOffice() {
 
         select.appendChild(option);
 
-        setStatus(
-            'Office created. Draw area and save placement.',
-            'green'
-        );
+        setStatus('Помещение создано. Нарисуйте его на схеме и сохраните.', 'green');
 
     } catch (e) {
 
         console.error(e);
-
-        setStatus(
-            'Create error',
-            'red'
-        );
+        setStatus('Ошибка создания', 'red');
     }
 }
 
 async function saveSelection() {
 
     if (!selection) {
-
-        setStatus(
-            'Draw area first',
-            'red'
-        );
+        setStatus('Нарисуйте область', 'red');
 
         return;
     }
 
-    const officeId =
-        document.getElementById('office-select').value;
+    const officeId = document.getElementById('office-select').value;
 
     if (!officeId) {
-
-        setStatus(
-            'Select office first',
-            'red'
-        );
+        setStatus('Выберите помещение', 'red');
 
         return;
     }
 
     try {
 
-        const response =
-            await fetch('/admin/floor-plan/save', {
+        const response = await fetch('/admin/floor-plan/save', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -271,69 +210,40 @@ async function saveSelection() {
             throw new Error();
         }
 
-        setStatus(
-            'Placement saved',
-            'green'
-        );
+        setStatus('Расположение сохранено', 'green');
 
         location.reload();
 
     } catch (e) {
 
         console.error(e);
-
-        setStatus(
-            'Save error',
-            'red'
-        );
+        setStatus('Ошибка сохранения', 'red');
     }
 }
 
 async function loadOfficeToEdit(officeId) {
 
-    const response =
-        await fetch('/admin/offices/' + officeId);
+    const response = await fetch('/admin/offices/' + officeId);
+    const office = await response.json();
 
-    const office =
-        await response.json();
-
-    document.getElementById('edit-office-id').value =
-        office.id;
-
-    document.getElementById('edit-number').value =
-        office.number;
-
-    document.getElementById('edit-area').value =
-        office.area;
-
-    document.getElementById('edit-floor').value =
-        office.floor;
-
-    document.getElementById('edit-capacity').value =
-        office.capacity;
-
-    document.getElementById('edit-price').value =
-        office.rentalPrice;
-
-    document.getElementById('edit-type').value =
-        office.officeType;
-
-    document.getElementById('edit-furniture').checked =
-        office.hasFurniture;
-
-    document.getElementById('edit-status').value =
-        office.status;
+    document.getElementById('edit-office-id').value = office.id;
+    document.getElementById('edit-number').value = office.number;
+    document.getElementById('edit-area').value = office.area;
+    document.getElementById('edit-floor').value = office.floor;
+    document.getElementById('edit-capacity').value = office.capacity;
+    document.getElementById('edit-price').value = office.rentalPrice;
+    document.getElementById('edit-type').value = office.officeType;
+    document.getElementById('edit-furniture').checked = office.hasFurniture;
+    document.getElementById('edit-status').value = office.status;
 }
 
 async function updateOffice() {
 
-    const officeId =
-        document.getElementById('edit-office-id').value;
+    const officeId = document.getElementById('edit-office-id').value;
 
     try {
 
-        const response =
-            await fetch('/admin/offices/update/' + officeId, {
+        const response = await fetch('/admin/offices/update/' + officeId, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -369,38 +279,30 @@ async function updateOffice() {
             throw new Error();
         }
 
-        setStatus(
-            'Office updated',
-            'green'
-        );
+        setStatus('Информация о помещении изменена', 'green');
 
         location.reload();
 
     } catch (e) {
 
         console.error(e);
-
-        setStatus(
-            'Update error',
-            'red'
-        );
+        setStatus('Ошибка обновления информации о помещении', 'red');
     }
 }
 
 function deleteOffice() {
 
-    const officeId =
-        document.getElementById('edit-office-id').value;
+    const officeId = document.getElementById('edit-office-id').value;
 
     deleteOfficeById(officeId);
+
 }
 
 async function deleteOfficeById(officeId) {
 
     try {
 
-        const response =
-            await fetch('/admin/offices/delete/' + officeId, {
+        const response = await fetch('/admin/offices/delete/' + officeId, {
                 method: 'DELETE'
             });
 
@@ -408,31 +310,22 @@ async function deleteOfficeById(officeId) {
             throw new Error();
         }
 
-        setStatus(
-            'Office deleted',
-            'green'
-        );
+        setStatus('Офис удален', 'green');
 
         location.reload();
 
     } catch (e) {
 
         console.error(e);
-
-        setStatus(
-            'Delete error',
-            'red'
-        );
+        setStatus('Ошибка удаления', 'red');
     }
 }
 
 function setStatus(text, color) {
 
-    const status =
-        document.getElementById('save-status');
+    const status = document.getElementById('save-status');
 
     status.innerText = text;
-
     status.style.color = color;
 }
 

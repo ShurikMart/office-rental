@@ -26,11 +26,7 @@ public class AuthController {
 
     @GetMapping("/register")
     public String registerPage(Model model) {
-
-        model.addAttribute(
-                "user",
-                new RegisterDto()
-        );
+        model.addAttribute("user", new RegisterDto());
 
         return "auth/register";
     }
@@ -41,18 +37,7 @@ public class AuthController {
             RegisterDto dto
     ) {
 
-        User user = new User(
-
-                dto.getUsername(),
-
-                dto.getEmail(),
-
-                passwordEncoder.encode(
-                        dto.getPassword()
-                ),
-
-                Role.USER
-        );
+        User user = new User(dto.getUsername(), dto.getEmail(), passwordEncoder.encode(dto.getPassword()), Role.USER);
 
         userRepository.save(user);
 

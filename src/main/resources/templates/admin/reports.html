@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Reports</title>
+    <link rel="stylesheet" href="/css/reports.css">
+</head>
+
+<body>
+
+<h1 class="page-title">Отчеты системы</h1>
+
+<div class="top-actions">
+    <a href="/admin/dashboard" class="back-button">Вернуться в панель администратора</a>
+</div>
+
+<div class="reports-layout">
+
+    <section class="report-section">
+
+        <h2>Отчет по помещениям</h2>
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+                <p>Всего помещений</p>
+                <span class="stat-value" th:text="${officeReport.totalOffices}"></span>
+            </div>
+
+            <div class="stat-card">
+                <p>Свободно</p>
+                <span class="stat-value" th:text="${officeReport.freeOffices}"></span>
+            </div>
+
+            <div class="stat-card">
+                <p>Занято</p>
+                <span class="stat-value" th:text="${officeReport.occupiedOffices}"></span>
+            </div>
+
+            <div class="stat-card">
+                <p>Средняя цена</p>
+                <span th:text="${#numbers.formatDecimal(officeReport.averagePrice, 1, 2)}"></span>
+            </div>
+
+            <div class="stat-card">
+                <p>Средняя площадь</p>
+                <span th:text="${#numbers.formatDecimal(officeReport.averageArea, 1, 2)}"></span>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="report-section">
+
+        <h2>Распределение помещений</h2>
+
+        <table class="report-table">
+
+            <tr>
+                <th>Тип помещения</th>
+                <th>Количество</th>
+            </tr>
+
+            <tr th:each="entry : ${officeReport.officesByType}">
+                <td th:text="${entry.key == 'STANDARD'} ? 'Открытый офис' : (${entry.key == 'MEETING_ROOM'} ? 'Переговорная' :
+                                (${entry.key == 'REST_ZONE'} ? 'Зона отдыха' : (${entry.key == 'SERVER_ROOM'} ? 'Серверная' :
+                                (${entry.key == 'WAREHOUSE'} ? 'Склад' : entry.key))))"></td>
+                <td th:text="${entry.value}"></td>
+            </tr>
+
+        </table>
+
+    </section>
+
+    <section class="report-section">
+
+        <h2>Отчет по заявкам</h2>
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+                <p>Всего заявок</p>
+                <span class="stat-value" th:text="${applicationReport.totalApplications}"></span>
+            </div>
+
+            <div class="stat-card">
+                <p>В ожидании</p>
+                <span class="stat-value" th:text="${applicationReport.pendingApplications}"></span>
+            </div>
+
+            <div class="stat-card">
+                <p>Одобрено</p>
+                <span class="stat-value" th:text="${applicationReport.approvedApplications}"></span>
+            </div>
+
+            <div class="stat-card">
+                <p>Отклонено</p>
+                <span class="stat-value" th:text="${applicationReport.rejectedApplications}"></span>
+            </div>
+
+            <div class="stat-card">
+                <p>Процент одобрения</p>
+                <span class="stat-value" th:text="${applicationReport.approvalRate}"></span>
+            </div>
+
+        </div>
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+                <p>Самый активный пользователь</p>
+                <span class="stat-value" th:text="${applicationReport.mostActiveUser}"></span>
+            </div>
+
+            <div class="stat-card">
+                <p>Самое востребованное помещение</p>
+                <span class="stat-value" th:text="${applicationReport.mostRequestedOffice}"></span>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="report-section">
+
+        <h2>Отчет по арендаторам</h2>
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+                <p>Активных арендаторов</p>
+                <span class="stat-value" th:text="${tenantReport.activeTenants}"></span>
+            </div>
+
+        </div>
+
+        <table class="report-table">
+
+            <tr>
+                <th>Пользователь</th>
+                <th>Количество аренд</th>
+            </tr>
+
+            <tr th:each="entry : ${tenantReport.tenantOfficeCounts}">
+                <td th:text="${entry.key}"></td>
+                <td th:text="${entry.value}"></td>
+            </tr>
+
+        </table>
+
+    </section>
+
+</div>
+
+</body>
+</html>

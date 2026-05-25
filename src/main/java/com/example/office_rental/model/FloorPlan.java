@@ -37,7 +37,7 @@ public class FloorPlan {
     private Double height;
 
     @Column(columnDefinition = "TEXT")
-    private String svgPathData; // опционально: сложная форма (полигон)
+    private String svgPathData;
 
     private String color;
 

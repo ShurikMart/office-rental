@@ -23,9 +23,7 @@ public class ProfileController {
 
     @GetMapping("/profile")
     public String profilePage(Model model) {
-
         User user = userService.getCurrentUser();
-
         model.addAttribute("user", user);
 
         return "profile/profile";
@@ -34,61 +32,21 @@ public class ProfileController {
     @GetMapping("/admin/dashboard")
     public String adminDashboard(Model model) {
 
-        long totalOffices =
-                officeSpaceRepository.count();
+        long totalOffices = officeSpaceRepository.count();
+        long freeOffices = officeSpaceRepository.countByStatus(OfficeStatus.FREE);
+        long occupiedOffices = officeSpaceRepository.countByStatus(OfficeStatus.OCCUPIED);
 
-        long freeOffices =
-                officeSpaceRepository
-                        .countByStatus(OfficeStatus.FREE);
+        model.addAttribute("totalOffices", totalOffices);
+        model.addAttribute("freeOffices", freeOffices);
+        model.addAttribute("occupiedOffices", occupiedOffices);
 
-        long occupiedOffices =
-                officeSpaceRepository
-                        .countByStatus(OfficeStatus.OCCUPIED);
+        long pendingApplications = applicationRepository.countByStatus(ApplicationStatus.PENDING);
+        long approvedApplications = applicationRepository.countByStatus(ApplicationStatus.APPROVED);
+        long rejectedApplications = applicationRepository.countByStatus(ApplicationStatus.REJECTED);
 
-        model.addAttribute(
-                "totalOffices",
-                totalOffices
-        );
-
-        model.addAttribute(
-                "freeOffices",
-                freeOffices
-        );
-
-        model.addAttribute(
-                "occupiedOffices",
-                occupiedOffices
-        );
-
-        long pendingApplications =
-                applicationRepository.countByStatus(
-                        ApplicationStatus.PENDING
-                );
-
-        long approvedApplications =
-                applicationRepository.countByStatus(
-                        ApplicationStatus.APPROVED
-                );
-
-        long rejectedApplications =
-                applicationRepository.countByStatus(
-                        ApplicationStatus.REJECTED
-                );
-
-        model.addAttribute(
-                "pendingApplications",
-                pendingApplications
-        );
-
-        model.addAttribute(
-                "approvedApplications",
-                approvedApplications
-        );
-
-        model.addAttribute(
-                "rejectedApplications",
-                rejectedApplications
-        );
+        model.addAttribute("pendingApplications", pendingApplications);
+        model.addAttribute("approvedApplications", approvedApplications);
+        model.addAttribute("rejectedApplications", rejectedApplications);
 
         return "admin/dashboard";
     }

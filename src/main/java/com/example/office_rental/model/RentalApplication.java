@@ -36,11 +36,7 @@ public class RentalApplication {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    public RentalApplication(
-            User user,
-            OfficeSpace officeSpace,
-            String comment
-    ) {
+    public RentalApplication(User user, OfficeSpace officeSpace, String comment) {
 
         this.user = user;
         this.officeSpace = officeSpace;

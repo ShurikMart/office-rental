@@ -11,34 +11,16 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class SecurityUserDetailsService
-        implements UserDetailsService {
+public class SecurityUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(
-            String username
-    ) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        User user = userRepository
-                .findByUsername(username)
-                .orElseThrow(() ->
-                        new UsernameNotFoundException(
-                                "User not found"
-                        ));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        return new org.springframework.security.core.userdetails.User(
-
-                user.getUsername(),
-
-                user.getPassword(),
-
-                List.of(
-                        new SimpleGrantedAuthority(
-                                "ROLE_" + user.getRole().name()
-                        )
-                )
-        );
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+                List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name())));
     }
 }

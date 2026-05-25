@@ -71,10 +71,7 @@ public class OfficeController {
                         hasFurniture
                 );
 
-        model.addAttribute(
-                "offices",
-                offices
-        );
+        model.addAttribute("offices", offices);
 
         return "offices/list";
     }
@@ -127,27 +124,15 @@ public class OfficeController {
                         hasFurniture
                 );
 
-        model.addAttribute(
-                "floorPlans",
-                floorPlanRepository.findByOfficeSpaceIn(offices)
-        );
+        model.addAttribute("floorPlans", floorPlanRepository.findByOfficeSpaceIn(offices));
 
         boolean isAdmin =
-                authentication != null
-                        &&
-                        authentication.getAuthorities()
-                                .stream()
-                                .anyMatch(
-                                        a -> a.getAuthority()
-                                                .equals("ROLE_ADMIN")
-                                );
+                authentication != null && authentication.getAuthorities().stream().anyMatch(
+                                        a -> a.getAuthority().equals("ROLE_ADMIN"));
 
         boolean isUser =
-                authentication != null
-                        &&
-                        authentication.getAuthorities()
-                                .stream()
-                                .anyMatch(a -> a.getAuthority().equals("ROLE_USER"));
+                authentication != null && authentication.getAuthorities().stream().anyMatch(
+                                        a -> a.getAuthority().equals("ROLE_USER"));
 
         model.addAttribute("isAdmin", isAdmin);
         model.addAttribute("isUser", isUser);
@@ -158,50 +143,33 @@ public class OfficeController {
     private List<OfficeSpace> getFilteredOffices(
 
             OfficeStatus status,
-
             Double minPrice,
-
             Double maxPrice,
-
             Integer floor,
-
             Double minArea,
-
             Double maxArea,
-
             Integer minCapacity,
-
             String officeType,
-
             Boolean hasFurniture
     ) {
 
         Specification<OfficeSpace> spec =
                 OfficeSpecification.hasStatus(status)
-                        .and(
-                                OfficeSpecification.minPrice(minPrice)
-                        )
-                        .and(
-                                OfficeSpecification.maxPrice(maxPrice)
-                        )
-                        .and(
-                                OfficeSpecification.floor(floor)
-                        )
-                        .and(
-                                OfficeSpecification.minArea(minArea)
-                        )
-                        .and(
-                                OfficeSpecification.maxArea(maxArea)
-                        )
-                        .and(
-                                OfficeSpecification.minCapacity(minCapacity)
-                        )
-                        .and(
-                                OfficeSpecification.officeType(officeType)
-                        )
-                        .and(
-                                OfficeSpecification.hasFurniture(hasFurniture)
-                        );
+                        .and(OfficeSpecification.minPrice(minPrice))
+
+                        .and(OfficeSpecification.maxPrice(maxPrice))
+
+                        .and(OfficeSpecification.floor(floor))
+
+                        .and(OfficeSpecification.minArea(minArea))
+
+                        .and(OfficeSpecification.maxArea(maxArea))
+
+                        .and(OfficeSpecification.minCapacity(minCapacity))
+
+                        .and(OfficeSpecification.officeType(officeType))
+
+                        .and(OfficeSpecification.hasFurniture(hasFurniture));
 
         return officeSpaceRepository.findAll(spec);
     }

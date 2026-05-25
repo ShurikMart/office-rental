@@ -30,7 +30,8 @@
             <td th:text="${app.user.username}"></td>
             <td th:text="${app.officeSpace.number}"></td>
             <td th:text="${app.comment != null && !#strings.isEmpty(app.comment) ? app.comment : 'Нет комментария'}"></td>
-            <td th:text="${app.status}"></td>
+            <td th:text="${app.status.name() == 'PENDING'} ? 'В ожидании' : (${app.status.name() == 'APPROVED'} ? 'Одобрено' :
+                         (${app.status.name() == 'REJECTED'} ? 'Отклонено' : app.status))"></td>
 
             <td>
                 <form

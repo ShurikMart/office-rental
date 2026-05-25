@@ -22,56 +22,27 @@ public class ApplicationService {
     private final UserService userService;
 
     @Transactional
-    public void createApplication(
-            Long officeId,
-            String comment
-    ) {
+    public void createApplication(Long officeId, String comment) {
 
-        User user =
-                userService.getCurrentUser();
+        User user = userService.getCurrentUser();
 
-        OfficeSpace office =
-                officeRepository
-                        .findById(officeId)
-                        .orElseThrow(() ->
-                                new RuntimeException(
-                                        "Office not found"
-                                ));
+        OfficeSpace office = officeRepository.findById(officeId).orElseThrow(() -> new RuntimeException("Office not found"));
 
 
         if (office.getStatus() == OfficeStatus.OCCUPIED) {
-
-            throw new RuntimeException(
-                    "Office already occupied"
-            );
+            throw new RuntimeException("Office already occupied");
         }
 
 
-        boolean alreadyExists =
-                applicationRepository
-                        .existsByUserAndOfficeSpaceAndStatus(
-                                user,
-                                office,
-                                ApplicationStatus.PENDING
-                        );
+        boolean alreadyExists = applicationRepository.existsByUserAndOfficeSpaceAndStatus(user, office, ApplicationStatus.PENDING);
 
         if (alreadyExists) {
-
-            throw new RuntimeException(
-                    "Application already exists"
-            );
+            throw new RuntimeException("Application already exists");
         }
 
-        RentalApplication application =
-                new RentalApplication(
-                        user,
-                        office,
-                        comment
-                );
+        RentalApplication application = new RentalApplication(user, office, comment);
 
-        application.setStatus(
-                ApplicationStatus.PENDING
-        );
+        application.setStatus(ApplicationStatus.PENDING);
 
         applicationRepository.save(application);
     }
@@ -79,61 +50,36 @@ public class ApplicationService {
     @Transactional
     public void approve(Long applicationId) {
 
-        RentalApplication application =
-                applicationRepository
-                        .findById(applicationId)
-                        .orElseThrow(() ->
-                                new RuntimeException(
-                                        "Application not found"
-                                ));
+        RentalApplication application = applicationRepository.findById(applicationId).orElseThrow(() -> new RuntimeException("Application not found"));
 
 
         if (application.getStatus() != ApplicationStatus.PENDING) {
-
-            throw new RuntimeException(
-                    "Application already processed"
-            );
+            throw new RuntimeException("Application already processed");
         }
 
-        OfficeSpace office =
-                application.getOfficeSpace();
+        OfficeSpace office = application.getOfficeSpace();
 
 
         if (office.getStatus() == OfficeStatus.OCCUPIED) {
-
-            throw new RuntimeException(
-                    "Office already occupied"
-            );
+            throw new RuntimeException("Office already occupied");
         }
 
-        application.setStatus(
-                ApplicationStatus.APPROVED
-        );
+        application.setStatus(ApplicationStatus.APPROVED);
 
-        office.setStatus(
-                OfficeStatus.OCCUPIED
-        );
+        office.setStatus(OfficeStatus.OCCUPIED);
 
-        office.setCurrentTenant(
-                application.getUser()
-        );
+        office.setCurrentTenant(application.getUser());
 
         officeRepository.save(office);
 
 
-        List<RentalApplication> applications =
-                applicationRepository
-                        .findByOfficeSpace(office);
+        List<RentalApplication> applications = applicationRepository.findByOfficeSpace(office);
 
         for (RentalApplication app : applications) {
 
-            if (!app.getId().equals(application.getId())
-                    && app.getStatus() == ApplicationStatus.PENDING) {
+            if (!app.getId().equals(application.getId()) && app.getStatus() == ApplicationStatus.PENDING) {
 
-                app.setStatus(
-                        ApplicationStatus.REJECTED
-                );
-
+                app.setStatus(ApplicationStatus.REJECTED);
                 applicationRepository.save(app);
             }
         }
@@ -144,13 +90,7 @@ public class ApplicationService {
     @Transactional
     public void reject(Long id) {
 
-        RentalApplication application =
-                applicationRepository
-                        .findById(id)
-                        .orElseThrow(() ->
-                                new RuntimeException(
-                                        "Application not found"
-                                ));
+        RentalApplication application = applicationRepository.findById(id).orElseThrow(() -> new RuntimeException("Application not found"));
 
 
         if (application.getStatus() != ApplicationStatus.PENDING) {
@@ -160,52 +100,31 @@ public class ApplicationService {
             );
         }
 
-        application.setStatus(
-                ApplicationStatus.REJECTED
-        );
-
+        application.setStatus(ApplicationStatus.REJECTED);
         applicationRepository.save(application);
     }
 
     @Transactional
     public void releaseOffice(Long officeId) {
 
-        User currentUser =
-                userService.getCurrentUser();
+        User currentUser = userService.getCurrentUser();
 
-        OfficeSpace office =
-                officeRepository
-                        .findById(officeId)
-                        .orElseThrow();
+        OfficeSpace office = officeRepository.findById(officeId).orElseThrow();
 
-        boolean isAdmin =
-                currentUser.getRole()
-                        .name()
-                        .equals("ADMIN");
-
-        boolean isTenant =
-                office.getCurrentTenant() != null
-                        && office.getCurrentTenant()
-                        .getId()
-                        .equals(currentUser.getId());
+        boolean isAdmin = currentUser.getRole().name().equals("ADMIN");
+        boolean isTenant = office.getCurrentTenant() != null && office.getCurrentTenant().getId().equals(currentUser.getId());
 
         if (!isAdmin && !isTenant) {
 
-            throw new RuntimeException(
-                    "You cannot release this office"
-            );
+            throw new RuntimeException("You cannot release this office");
         }
 
         if (office.getStatus() == OfficeStatus.FREE) {
 
-            throw new RuntimeException(
-                    "Office already free"
-            );
+            throw new RuntimeException("Office already free");
         }
 
-        office.setStatus(
-                OfficeStatus.FREE
-        );
+        office.setStatus(OfficeStatus.FREE);
 
         office.setCurrentTenant(null);
 

@@ -34,23 +34,11 @@ public class ApplicationController {
     ) {
 
         try {
-
-            applicationService.createApplication(
-                    officeId,
-                    comment
-            );
-
-            redirectAttributes.addFlashAttribute(
-                    "success",
-                    "Application created"
-            );
+            applicationService.createApplication(officeId, comment);
+            redirectAttributes.addFlashAttribute("success", "Application created");
 
         } catch (RuntimeException e) {
-
-            redirectAttributes.addFlashAttribute(
-                    "error",
-                    e.getMessage()
-            );
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
 
         return "redirect:/profile";
@@ -58,25 +46,15 @@ public class ApplicationController {
 
     @GetMapping("/applications/my")
     public String myApplications(Model model) {
-
-        User user =
-                userService.getCurrentUser();
-
-        model.addAttribute(
-                "applications",
-                applicationRepository.findByUser(user)
-        );
+        User user = userService.getCurrentUser();
+        model.addAttribute("applications", applicationRepository.findByUser(user));
 
         return "applications/my-applications";
     }
 
     @GetMapping("/admin/applications")
     public String adminApplications(Model model) {
-
-        model.addAttribute(
-                "applications",
-                applicationRepository.findAll()
-        );
+        model.addAttribute("applications", applicationRepository.findAll());
 
         return "admin/applications";
     }
@@ -88,20 +66,11 @@ public class ApplicationController {
     ) {
 
         try {
-
             applicationService.approve(id);
-
-            redirectAttributes.addFlashAttribute(
-                    "success",
-                    "Application approved"
-            );
+            redirectAttributes.addFlashAttribute("success", "Application approved");
 
         } catch (RuntimeException e) {
-
-            redirectAttributes.addFlashAttribute(
-                    "error",
-                    e.getMessage()
-            );
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
 
         return "redirect:/admin/applications";
@@ -114,20 +83,11 @@ public class ApplicationController {
     ) {
 
         try {
-
             applicationService.reject(id);
-
-            redirectAttributes.addFlashAttribute(
-                    "success",
-                    "Application rejected"
-            );
+            redirectAttributes.addFlashAttribute("success", "Application rejected");
 
         } catch (RuntimeException e) {
-
-            redirectAttributes.addFlashAttribute(
-                    "error",
-                    e.getMessage()
-            );
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
 
         return "redirect:/admin/applications";
@@ -140,20 +100,11 @@ public class ApplicationController {
     ) {
 
         try {
-
             applicationService.releaseOffice(officeId);
-
-            redirectAttributes.addFlashAttribute(
-                    "success",
-                    "Office released"
-            );
+            redirectAttributes.addFlashAttribute("success", "Office released");
 
         } catch (RuntimeException e) {
-
-            redirectAttributes.addFlashAttribute(
-                    "error",
-                    e.getMessage()
-            );
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
 
         return "redirect:/applications/my";
@@ -166,20 +117,11 @@ public class ApplicationController {
     ) {
 
         try {
-
             applicationService.releaseOffice(officeId);
-
-            redirectAttributes.addFlashAttribute(
-                    "success",
-                    "Office released"
-            );
+            redirectAttributes.addFlashAttribute("success", "Office released");
 
         } catch (RuntimeException e) {
-
-            redirectAttributes.addFlashAttribute(
-                    "error",
-                    e.getMessage()
-            );
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
 
         return "redirect:/admin/applications";

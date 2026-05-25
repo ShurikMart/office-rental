@@ -14,16 +14,8 @@ public class UserService {
 
     public User getCurrentUser() {
 
-        String username = SecurityContextHolder
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-                .getContext()
-
-                .getAuthentication()
-
-                .getName();
-
-        return userRepository
-                .findByUsername(username)
-                .orElseThrow();
+        return userRepository.findByUsername(username).orElseThrow();
     }
 }

@@ -9,39 +9,19 @@
 <body>
 
 <div class="profile-sidebar">
-    <a href="/profile" class="profile-link">Profile</a>
+    <a href="/profile" class="profile-link">Профиль</a>
 </div>
 
-<h1 class="page-title">Floor Plan Editor</h1>
+<h1 class="page-title">Редактор схемы помещений</h1>
 
 <div class="editor-layout">
 
     <div class="editor-sidebar">
 
         <div class="toolbar">
-            <button type="button"
-                    class="toolbar-btn"
-                    onclick="setMode('draw')">
-
-                Рисовать
-
-            </button>
-
-            <button type="button"
-                    class="toolbar-btn"
-                    onclick="setMode('edit')">
-
-                Редактировать
-
-            </button>
-
-            <button type="button"
-                    class="toolbar-btn danger-btn"
-                    onclick="setMode('delete')">
-
-                Удалить
-
-            </button>
+            <button type="button" class="toolbar-btn" onclick="setMode('draw')">Рисовать</button>
+            <button type="button" class="toolbar-btn" onclick="setMode('edit')">Редактировать</button>
+            <button type="button" class="toolbar-btn danger-btn" onclick="setMode('delete')">Удалить</button>
         </div>
 
 
@@ -56,25 +36,11 @@
                 </option>
             </select>
 
-            <input type="text"
-                   id="new-number"
-                   placeholder="Номер офиса">
-
-            <input type="number"
-                   id="new-area"
-                   placeholder="Площадь">
-
-            <input type="number"
-                   id="new-floor"
-                   placeholder="Этаж">
-
-            <input type="number"
-                   id="new-capacity"
-                   placeholder="Вместимость">
-
-            <input type="number"
-                   id="new-price"
-                   placeholder="Цена">
+            <input type="text" id="new-number" placeholder="Номер офиса">
+            <input type="number" id="new-area" placeholder="Площадь">
+            <input type="number" id="new-floor" placeholder="Этаж">
+            <input type="number" id="new-capacity" placeholder="Вместимость">
+            <input type="number" id="new-price" placeholder="Цена">
 
             <select id="new-type">
                 <option value="STANDARD">Открытый офис</option>
@@ -84,8 +50,7 @@
                 <option value="WAREHOUSE">Склад</option>
             </select>
 
-            <label>
-                Наличие фурнитуры
+            <label>Наличие фурнитуры
                 <input type="checkbox" id="new-furniture">
             </label>
 
@@ -94,69 +59,33 @@
                 <option value="OCCUPIED">Занято</option>
             </select>
 
-            <button type="button"
-                    class="toolbar-btn action-btn"
-                    onclick="createOffice()">
-
-                Создать помещение
-
-            </button>
-
-            <hr>
+            <button type="button" class="toolbar-btn action-btn" onclick="createOffice()">Создать помещение</button>
 
             <h3>Место помещения на плане</h3>
 
             <select id="office-select">
-
-                <option value="">
-                    Выбрать офис
-                </option>
-
+                <option value="">Выбрать офис</option>
                 <option th:each="office : ${offices}"
                         th:value="${office.id}"
                         th:text="${office.number}">
                 </option>
-
             </select>
 
-            <button type="button"
-                    class="toolbar-btn action-btn"
-                    onclick="saveSelection()">
-
-                Сохранить расположение
-
-            </button>
+            <button type="button" class="toolbar-btn action-btn" onclick="saveSelection()">Сохранить расположение</button>
 
         </div>
 
 
-        <div id="edit-toolbar"
-             class="mode-panel"
-             style="display:none;">
+        <div id="edit-toolbar" class="mode-panel" style="display:none;">
 
             <h3>Редактировать помещение</h3>
 
             <input type="hidden" id="edit-office-id">
-
-            <input type="text"
-                   id="edit-number"
-                   placeholder="Номер">
-
-            <input type="number"
-                   id="edit-area"
-                   placeholder="Площадь">
-
-            <input type="number"
-                   id="edit-floor"
-                   placeholder="Этаж">
-
-            <input type="number"
-                   id="edit-capacity"
-                   placeholder="Вместимость">
-
-            <input type="number"
-                   id="edit-price"
-                   placeholder="Цена">
+            <input type="text" id="edit-number" placeholder="Номер">
+            <input type="number" id="edit-area" placeholder="Площадь">
+            <input type="number" id="edit-floor" placeholder="Этаж">
+            <input type="number" id="edit-capacity" placeholder="Вместимость">
+            <input type="number" id="edit-price" placeholder="Цена">
 
             <select id="edit-type">
                 <option value="STANDARD">Открытый офис</option>
@@ -166,8 +95,7 @@
                 <option value="WAREHOUSE">Склад</option>
             </select>
 
-            <label>
-                Наличие фурнитуры
+            <label>Наличие фурнитуры
                 <input type="checkbox" id="edit-furniture">
             </label>
 
@@ -176,21 +104,8 @@
                 <option value="OCCUPIED">Занято</option>
             </select>
 
-            <button type="button"
-                    class="toolbar-btn action-btn"
-                    onclick="updateOffice()">
-
-                Сохранить изменения
-
-            </button>
-
-            <button type="button"
-                    class="toolbar-btn danger-btn"
-                    onclick="deleteOffice()">
-
-                Удалить помещение
-
-            </button>
+            <button type="button" class="toolbar-btn action-btn" onclick="updateOffice()">Сохранить изменения</button>
+            <button type="button" class="toolbar-btn danger-btn" onclick="deleteOffice()">Удалить помещение</button>
 
         </div>
 
@@ -200,9 +115,7 @@
 
     <div class="plan-shell">
 
-        <div class="plan-container"
-             id="plan-container"
-             style="background-image:url('/images/floor1.png');">
+        <div class="plan-container" id="plan-container" style="background-image:url('/images/floor1.png');">
 
             <div th:each="plan : ${floorPlans}"
                  class="office-box"
@@ -214,8 +127,8 @@
                     'height:' + ${plan.height} + 'px;'"
                  th:onclick="'onOfficeClick(this, event)'">
 
-                <div class="office-label"
-                     th:text="${plan.officeSpace.number}">
+                <div class="office-label" th:text="${plan.officeSpace.number}">
+
                 </div>
 
             </div>

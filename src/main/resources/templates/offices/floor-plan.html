@@ -14,12 +14,10 @@
     <a href="/profile" class="profile-link">Профиль</a>
 </div>
 
-<h1 style="text-align:center;">План этажа</h1>
+<h1 style="text-align:center;">Схема помещений</h1>
 
 <div class="filters-sidebar">
-    <button type="button" class="filters-toggle-btn" id="filters-toggle-btn">
-        Использовать фильтры
-    </button>
+    <button type="button" class="filters-toggle-btn" id="filters-toggle-btn">Использовать фильтры</button>
 
     <div class="filters-panel" id="filters-panel">
         <form method="get" action="/floor-plan" class="filters-form">
@@ -67,10 +65,12 @@
             </select>
 
             <label>Мин. цена:</label>
-            <input type="number" name="minPrice" th:value="${param.minPrice != null ? param.minPrice[0] : ''}">
+            <input type="number" name="minPrice"
+                   th:value="${param.minPrice != null ? param.minPrice[0] : ''}">
 
             <label>Макс. цена:</label>
-            <input type="number" name="maxPrice" th:value="${param.maxPrice != null ? param.maxPrice[0] : ''}">
+            <input type="number" name="maxPrice"
+                   th:value="${param.maxPrice != null ? param.maxPrice[0] : ''}">
 
             <div class="filters-actions">
                 <button type="submit">Применить</button>
@@ -127,9 +127,7 @@
         </form>
     </div>
 
-    <p th:if="${!isAdmin and !isUser}">
-        Пожалуйста, войдите, чтоб подать заявку.
-    </p>
+    <p th:if="${!isAdmin and !isUser}">Пожалуйста, войдите, чтоб подать заявку.</p>
 </div>
 
 <script src="/js/floor-plan.js"></script>

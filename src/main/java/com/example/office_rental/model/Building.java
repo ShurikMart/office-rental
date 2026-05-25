@@ -33,7 +33,6 @@ public class Building {
     @OneToMany(mappedBy = "building", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OfficeSpace> officeSpaces = new ArrayList<>();
 
-    // Конструктор с основными полями
     public Building(String name, String address, Integer totalFloors) {
         this.name = name;
         this.address = address;

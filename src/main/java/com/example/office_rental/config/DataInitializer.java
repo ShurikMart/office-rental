@@ -119,23 +119,16 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     @Bean
-    CommandLineRunner initUsers(
-            UserRepository userRepository,
-            PasswordEncoder passwordEncoder
-    ) {
+    CommandLineRunner initUsers(UserRepository userRepository, PasswordEncoder passwordEncoder) {
 
         return args -> {
 
             if (userRepository.count() == 0) {
 
                 User admin = new User(
-
                         "admin",
-
                         "admin@example.com",
-
                         passwordEncoder.encode("55849276"),
-
                         Role.ADMIN
                 );
 

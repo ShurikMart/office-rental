@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html
         xmlns:th="http://www.thymeleaf.org"
-
         xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
@@ -13,78 +12,59 @@
 
 <body>
 
-<h1>Профиль пользователя</h1>
+<div class="profile-wrapper">
 
-<hr>
+    <div class="profile-card">
 
-<h3>Информация о пользователе</h3>
+        <h1>Профиль пользователя</h1>
 
-<p>
-    <b>Имя:</b>
+        <div class="dashboard-section">
 
-    <span th:text="${user.username}"></span>
-</p>
+            <h3>Информация о пользователе</h3>
 
-<p>
-    <b>Эл. почта:</b>
+            <div class="stats-grid">
 
-    <span th:text="${user.email}"></span>
-</p>
+                <div class="stat-card">
+                    <p><b>Имя</b></p>
+                    <span class="stat-value" th:text="${user.username}"></span>
+                </div>
 
-<p>
-    <b>Роль:</b>
+                <div class="stat-card">
+                    <p><b>Эл. почта</b></p>
+                    <span class="stat-value"th:text="${user.email}"></span>
+                </div>
 
-    <span th:text="${user.role}"></span>
-</p>
+                <div class="stat-card">
+                    <p><b>Роль</b></p>
+                    <span class="stat-value" th:text="${user.role.name() == 'ADMIN' ? 'Администратор' : 'Пользователь'}"></span>
+                </div>
+            </div>
+        </div>
 
-<hr>
+        <div class="dashboard-section">
 
-<h3>Навигация</h3>
-<ul>
+            <h3>Навигация</h3>
 
-    <li>
+            <ul class="nav-list">
+                <li><a href="/floor-plan">Схема помещений</a></li>
+                <li sec:authorize="hasRole('USER')"><a href="/applications/my">Мои заявки</a></li>
+                <li sec:authorize="hasRole('ADMIN')"><a href="/admin/dashboard">Панель администратора</a></li>
+                <li sec:authorize="hasRole('ADMIN')"><a href="/offices">Список помещений</a></li>
+            </ul>
 
-        <a href="/floor-plan">
-            Просмотреть план здания
-        </a>
+        </div>
 
-    </li>
+        <div class="logout-section">
 
-    <li sec:authorize="hasRole('USER')">
+            <form method="post" action="/logout">
+                <button type="submit">Выйти</button>
+            </form>
 
-        <a href="/applications/my">
-            Мои заявки
-        </a>
+        </div>
 
-    </li>
+    </div>
 
-    <li sec:authorize="hasRole('ADMIN')">
-
-        <a href="/admin/dashboard">
-            Инструментарий админа
-        </a>
-
-    </li>
-
-    <li sec:authorize="hasRole('ADMIN')">
-
-        <a href="/offices">
-            Список помещений
-        </a>
-
-    </li>
-
-</ul>
-
-<hr>
-
-<form method="post" action="/logout">
-
-    <button type="submit">
-        Выйти
-    </button>
-
-</form>
+</div>
 
 </body>
 </html>

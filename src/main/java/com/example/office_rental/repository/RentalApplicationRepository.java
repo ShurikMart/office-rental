@@ -16,13 +16,7 @@ public interface RentalApplicationRepository
 
     long countByStatus(ApplicationStatus status);
 
-    boolean existsByUserAndOfficeSpaceAndStatus(
-            User user,
-            OfficeSpace officeSpace,
-            ApplicationStatus status
-    );
+    boolean existsByUserAndOfficeSpaceAndStatus(User user, OfficeSpace officeSpace, ApplicationStatus status);
 
-    List<RentalApplication> findByOfficeSpace(
-            OfficeSpace officeSpace
-    );
+    List<RentalApplication> findByOfficeSpace(OfficeSpace officeSpace);
 }
